@@ -7,6 +7,8 @@ Entity::Entity(bool is2D, string entityName)
     this->is2D = is2D;
     this->entityName = entityName;
     this->entityId = EntityManager::generateEntityId();
+
+    EntityManager::entities.push_back(this);
 }
 
 Entity::Entity(string entityName)
@@ -14,6 +16,8 @@ Entity::Entity(string entityName)
     this->is2D = true;
     this->entityName = entityName;
     this->entityId = EntityManager::generateEntityId();
+
+    EntityManager::entities.push_back(this);
 }
 
 void Entity::printInfo() {
@@ -43,7 +47,12 @@ int EntityManager::generateEntityId()
     return id;
 }
 
-void EntityManager::addEntity(Entity* entity)
+void EntityManager::destroyEntity(Entity* entity)
+{
+    entities.push_back(entity);
+}
+
+void EntityManager::destroyEntity(Entity* entity)
 {
     entities.push_back(entity);
 }

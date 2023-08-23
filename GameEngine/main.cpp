@@ -7,9 +7,6 @@ int main()
     Entity entity1("barrel");
     Entity2D entity2("barrel2", "barrel2.sprite", 3.0, 4.0);
 
-    EntityManager::addEntity(&entity1);
-    EntityManager::addEntity(&entity2);
-
     EntityManager::printAllEntities();
 
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");

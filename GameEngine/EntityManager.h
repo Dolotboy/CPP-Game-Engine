@@ -37,7 +37,9 @@ public:
 
     static int generateEntityId();
 
-    static void addEntity(Entity* entity);
+    static void destroyEntity(Entity* entity);
+
+    static void destroyEntity(int entitiesId);
 
     static void printAllEntities();
 
