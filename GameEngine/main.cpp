@@ -1,30 +1,19 @@
 #include <SFML/Graphics.hpp>
 #include "EntityManager.h"
+#include "Game.h"
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
 
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
+    Game myGame(400, 400, "Game Engine Test Window");
+    myGame.init();
+    myGame.start();
 
-        window.clear();
-        window.draw(shape);
-        window.display();
+    Entity2D entity2("barrel", "E:\\Photos\\spongebobpatrick.jpg", 3.0, 4.0);
 
-        Entity entity1("barrel");
-        Entity2D entity2("barrel2", "barrel2.sprite", 3.0, 4.0);
+    EntityManager::printAllEntities();
 
-        EntityManager::printAllEntities();
-    }
+
 
     return 0;
 }

@@ -20,6 +20,10 @@ Entity::Entity(string entityName)
     EntityManager::entities.push_back(this);
 }
 
+void Entity::render(sf::RenderTarget& target)
+{
+}
+
 void Entity::printInfo() {
     std::cout << "Entity ID: " << entityId << std::endl;
 }
@@ -30,29 +34,26 @@ Entity2D::Entity2D(string entityName, string spriteName, double width, double he
     this->width = width;
     this->height = height;
 
-    sf::Texture texture;
-    if (!texture.loadFromFile("image.png"))
-    {
-        // error...
-    }
+
+    setTexture(spriteName);
+    setSprite(this->texture);
 }
 
-void Entity2D::setTexture(sf::Texture texture)
+void Entity2D::setTexture(string textureName)
 {
-    sf::Texture texture;
-    if (texture.loadFromFile("image.png"))
+    if (texture.loadFromFile(textureName))
     {
         // error...
     }
     this->texture = texture;
 }
 
-void Entity2D::setSprite(sf::Sprite sprite)
+void Entity2D::setSprite(sf::Texture texture)
 {
     this->sprite.setTexture(texture);
 }
 
-void Entity2D::Render(sf::RenderTarget& target)
+void Entity2D::render(sf::RenderTarget& target)
 {
     target.draw(this->sprite);
 }
@@ -78,9 +79,16 @@ void EntityManager::destroyEntity(Entity* entity)
     entities.push_back(entity);
 }
 
-void EntityManager::destroyEntity(Entity* entity)
+void EntityManager::destroyEntity(int entityId)
 {
-    entities.push_back(entity);
+    //entities.push_back(entity);
+}
+
+void EntityManager::renderAllEntities(sf::RenderTarget& target)
+{
+    for (const auto& entity : entities) {
+        entity->render(target);
+    }
 }
 
 void EntityManager::printAllEntities()
