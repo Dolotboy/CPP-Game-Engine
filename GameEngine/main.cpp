@@ -3,12 +3,6 @@
 
 int main()
 {
-
-    Entity entity1("barrel");
-    Entity2D entity2("barrel2", "barrel2.sprite", 3.0, 4.0);
-
-    EntityManager::printAllEntities();
-
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);
@@ -25,6 +19,11 @@ int main()
         window.clear();
         window.draw(shape);
         window.display();
+
+        Entity entity1("barrel");
+        Entity2D entity2("barrel2", "barrel2.sprite", 3.0, 4.0);
+
+        EntityManager::printAllEntities();
     }
 
     return 0;

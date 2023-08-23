@@ -29,9 +29,35 @@ Entity2D::Entity2D(string entityName, string spriteName, double width, double he
     this->spriteName = spriteName;
     this->width = width;
     this->height = height;
+
+    sf::Texture texture;
+    if (!texture.loadFromFile("image.png"))
+    {
+        // error...
+    }
 }
 
-void Entity2D::printInfo(){
+void Entity2D::setTexture(sf::Texture texture)
+{
+    sf::Texture texture;
+    if (texture.loadFromFile("image.png"))
+    {
+        // error...
+    }
+    this->texture = texture;
+}
+
+void Entity2D::setSprite(sf::Sprite sprite)
+{
+    this->sprite.setTexture(texture);
+}
+
+void Entity2D::Render(sf::RenderTarget& target)
+{
+    target.draw(this->sprite);
+}
+
+void Entity2D::printInfo() {
     std::cout << "Entity2D ID: " << this->entityId << ", Sprite: (" << this->spriteName << ") Width: (" << this->width << ") Height: (" << this->height << ")" << std::endl;
 }
 
