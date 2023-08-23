@@ -1,76 +1,56 @@
 #include "EntityManager.h"
 
-/*************************ENTITY****************************/
+std::vector<Entity*> EntityManager::entities; // Need to define the static "list" otherwise you will get an unresolved external symbol error
 
 Entity::Entity(bool is2D, string entityName)
 {
-	this->is2D = is2D;
-	this->entityName = entityName;
-	this->entityId = EntityManager::GenerateEntityId();
+    this->is2D = is2D;
+    this->entityName = entityName;
+    this->entityId = EntityManager::generateEntityId();
 }
 
-void Entity::AddComponent()
+Entity::Entity(string entityName)
 {
+    this->is2D = true;
+    this->entityName = entityName;
+    this->entityId = EntityManager::generateEntityId();
 }
 
-Entity::~Entity()
+void Entity::printInfo() {
+    std::cout << "Entity ID: " << entityId << std::endl;
+}
+
+Entity2D::Entity2D(string entityName, string spriteName, double width, double height) : Entity(true, entityName)
 {
+    this->spriteName = spriteName;
+    this->width = width;
+    this->height = height;
 }
 
-/*************************ENTITY2D****************************/
+void Entity2D::printInfo(){
+    std::cout << "Entity2D ID: " << this->entityId << ", Sprite: (" << this->spriteName << ") Width: (" << this->width << ") Height: (" << this->height << ")" << std::endl;
+}
 
-Entity2D::Entity2D(string entityName, string spriteName, int width, int height) : Entity(true, entityName)
+int EntityManager::generateEntityId()
 {
-	this->spriteName = spriteName;
-	this->width = width;
-	this->height = height;
+    int id = 0;
+    for (const auto& entity : entities) {
+        if (entity->entityId >= id)
+        {
+            id = entity->entityId + 1;
+        }
+    }
+    return id;
 }
 
-Entity2D::Entity2D(string entityName) : Entity(true, entityName)
+void EntityManager::addEntity(Entity* entity)
 {
-	this->width = 0;
-	this->height = 0;
+    entities.push_back(entity);
 }
 
-Entity2D::~Entity2D()
+void EntityManager::printAllEntities()
 {
+    for (const auto& entity : entities) {
+        entity->printInfo();
+    }
 }
-
-/*************************ENTITY MANAGER****************************/
-
-int EntityManager::GenerateEntityId()
-{
-	int id = 10;
-	/*
-	for (int i = 0; i < entities.size(); i++)
-	{
-		if (entities[i].entityId > id)
-		{
-			id = entities[i].entityId;
-		}
-	}
-	*/
-	return id;
-}
-
-void EntityManager::CreateEntity2D(Entity2D* entity)
-{
-	entities2D.insert(entities2D.begin(), entity);
-}
-
-void EntityManager::CreateEntity2D(string entityName)
-{
-
-}
-
-void EntityManager::DestroyEntity(int entityId)
-{
-
-}
-
-void EntityManager::DestroyEntity(Entity entity)
-{
-
-}
-
-

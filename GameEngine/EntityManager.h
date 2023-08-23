@@ -1,63 +1,46 @@
 #pragma once
+#include <iostream>
 #include <string>
 #include <list>
 #include "Component.h"
 #include <vector>
 
 using namespace std;
-class Entity
-{
-	//Attributs
-private:
-	bool is2D;
-	string entityName;
+class Entity {
 public:
-	int entityId;
-	list <Component> componentsList;
+    int entityId;
 
-	//Methods
-public:
-	Entity(bool is2D, string entityName);
-	void AddComponent();
+    Entity(bool is2D, string entityName);
+    Entity(string entityName);
 
-	~Entity();
-private:
+    virtual void printInfo();
+
+protected:
+    bool is2D;
+    string entityName;
 };
 
-class Entity2D : public Entity
-{
-	//Attributs
-private:
-	string spriteName;
-	int width;
-	int height;
-
+class Entity2D : public Entity {
 public:
+    Entity2D(string entityName, string spriteName, double width, double height);
 
-	//Methods
-public:
-	Entity2D(string entityName, string spriteName, int width, int height);
-	Entity2D(string entityName);
-
-	~Entity2D();
+    void printInfo();
 
 private:
-
+    string spriteName;
+    double width, height;
 };
 
-static class EntityManager
-{
-//Attributs
-private:
+class EntityManager {
 public:
-	static vector<Entity2D*> entities2D;
-//Methods
-public:
-	static int GenerateEntityId();
-	static void CreateEntity2D(Entity2D* entity);
-	static void CreateEntity2D(string entityName);
-	static void DestroyEntity(int entityId);
-	static void DestroyEntity(Entity entity);
+    static std::vector<Entity*> entities;
+
+    static int generateEntityId();
+
+    static void addEntity(Entity* entity);
+
+    static void printAllEntities();
+
 private:
 };
 
