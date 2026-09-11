@@ -41,14 +41,13 @@ Entity2D::Entity2D(string entityName, string spriteName, double width, double he
 
 void Entity2D::setTexture(string textureName)
 {
-    if (texture.loadFromFile(textureName))
+    if (!texture.loadFromFile(textureName))
     {
-        // error...
+        std::cerr << "Unable to load texture: " << textureName << std::endl;
     }
-    this->texture = texture;
 }
 
-void Entity2D::setSprite(sf::Texture texture)
+void Entity2D::setSprite(const sf::Texture& texture)
 {
     this->sprite.setTexture(texture);
 }

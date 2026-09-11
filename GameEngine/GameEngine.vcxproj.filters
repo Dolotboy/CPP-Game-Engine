@@ -24,45 +24,45 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="Game\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Gravity2D.cpp">
+    <ClCompile Include="Core\Gravity2D.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Collider2D.cpp">
+    <ClCompile Include="Core\Collider2D.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
+    <ClCompile Include="Game\Player.cpp">
       <Filter>Entities</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp">
+    <ClCompile Include="Core\Component.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="EntityManager.cpp">
+    <ClCompile Include="Core\EntityManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Game.cpp">
+    <ClCompile Include="Core\Game.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Collider2D.h">
+    <ClInclude Include="Core\Collider2D.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Gravity2D.h">
+    <ClInclude Include="Core\Gravity2D.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
+    <ClInclude Include="Game\Player.h">
       <Filter>Entities</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
+    <ClInclude Include="Core\Component.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="EntityManager.h">
+    <ClInclude Include="Core\EntityManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Game.h">
+    <ClInclude Include="Core\Game.h">
       <Filter>Managers</Filter>
     </ClInclude>
   </ItemGroup>

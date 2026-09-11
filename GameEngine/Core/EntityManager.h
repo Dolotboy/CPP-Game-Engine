@@ -30,7 +30,7 @@ public:
 
     void setTexture(string textureName);
 
-    void setSprite(sf::Texture texture);
+    void setSprite(const sf::Texture& texture);
 
     void render(sf::RenderTarget& target) override;
 
