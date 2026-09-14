@@ -1,0 +1,9 @@
+{
+//Attributs
+	private:
+	public:
+
+//Methods
+	public:
+	private:
+};
