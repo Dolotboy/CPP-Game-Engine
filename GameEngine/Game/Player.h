@@ -1,9 +1,4 @@
 #pragma once
-<<<<<<< HEAD
-class Player
-{
-=======
-
 #include "../Core/EntityManager.h"
 #include <SFML/Window/Keyboard.hpp>
 
@@ -17,6 +12,5 @@ public:
 
 private:
     float speed;
->>>>>>> main
 };
 

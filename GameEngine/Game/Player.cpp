@@ -1,6 +1,4 @@
 #include "Player.h"
-<<<<<<< HEAD
-=======
 #include <cmath>
 
 Player::Player(string entityName, string spriteName)
@@ -39,4 +37,3 @@ void Player::update(float deltaTime)
     handleInput();
     Entity2D::update(deltaTime);
 }
->>>>>>> main
