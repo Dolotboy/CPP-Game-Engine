@@ -13,11 +13,19 @@ class Entity {
 public:
     int entityId;
 
+    sf::Vector2f position;
+    sf::Vector2f velocity;
+
     Entity(bool is2D, string entityName);
     Entity(string entityName);
 
+
+    virtual void update(float deltaTime);
     virtual void render(sf::RenderTarget& target);
     virtual void printInfo();
+
+    void setPosition(float x, float y);
+    void setVelocity(float x, float y);
 
 protected:
     bool is2D;
@@ -32,6 +40,8 @@ public:
 
     void setSprite(const sf::Texture& texture);
 
+
+    void update(float deltaTime) override;
     void render(sf::RenderTarget& target) override;
 
     void printInfo();

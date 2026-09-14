@@ -25,12 +25,19 @@ void Game::start()
 
 void Game::update()
 {
+	sf::Clock clock;
+
 	while (window->isOpen())
 	{
+		float deltaTime = clock.restart().asSeconds();
+
+		for (auto& entity : EntityManager::entities)
+		{
+			entity->update(deltaTime);
+		}
+
 		window->clear();
-
 		render();
-
 		window->display();
 	}
 }

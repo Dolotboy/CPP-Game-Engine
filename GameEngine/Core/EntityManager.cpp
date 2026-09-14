@@ -8,6 +8,9 @@ Entity::Entity(bool is2D, string entityName)
     this->entityName = entityName;
     this->entityId = EntityManager::generateEntityId();
 
+    this->position = sf::Vector2f(0.f, 0.f);
+    this->velocity = sf::Vector2f(0.f, 0.f);
+
     EntityManager::entities.push_back(this);
 }
 
@@ -17,7 +20,25 @@ Entity::Entity(string entityName)
     this->entityName = entityName;
     this->entityId = EntityManager::generateEntityId();
 
+    this->position = sf::Vector2f(0.f, 0.f);
+    this->velocity = sf::Vector2f(0.f, 0.f);
+
     EntityManager::entities.push_back(this);
+}
+
+void Entity::update(float deltaTime)
+{
+    this->position += this->velocity * deltaTime;
+}
+
+void Entity::setPosition(float x, float y)
+{
+    this->position = sf::Vector2f(x, y);
+}
+
+void Entity::setVelocity(float x, float y)
+{
+    this->velocity = sf::Vector2f(x, y);
 }
 
 void Entity::render(sf::RenderTarget& target)
@@ -37,6 +58,10 @@ Entity2D::Entity2D(string entityName, string spriteName, double width, double he
 
     setTexture(spriteName);
     setSprite(this->texture);
+<<<<<<< HEAD
+=======
+    this->sprite.setPosition(this->position);
+>>>>>>> main
 }
 
 void Entity2D::setTexture(string textureName)
@@ -52,6 +77,15 @@ void Entity2D::setSprite(const sf::Texture& texture)
     this->sprite.setTexture(texture);
 }
 
+<<<<<<< HEAD
+=======
+void Entity2D::update(float deltaTime)
+{
+    Entity::update(deltaTime);
+    this->sprite.setPosition(this->position);
+}
+
+>>>>>>> main
 void Entity2D::render(sf::RenderTarget& target)
 {
     target.draw(this->sprite);
