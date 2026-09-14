@@ -58,10 +58,8 @@ Entity2D::Entity2D(string entityName, string spriteName, double width, double he
 
     setTexture(spriteName);
     setSprite(this->texture);
-<<<<<<< HEAD
-=======
+
     this->sprite.setPosition(this->position);
->>>>>>> main
 }
 
 void Entity2D::setTexture(string textureName)
@@ -77,15 +75,13 @@ void Entity2D::setSprite(const sf::Texture& texture)
     this->sprite.setTexture(texture);
 }
 
-<<<<<<< HEAD
-=======
+
 void Entity2D::update(float deltaTime)
 {
     Entity::update(deltaTime);
     this->sprite.setPosition(this->position);
 }
 
->>>>>>> main
 void Entity2D::render(sf::RenderTarget& target)
 {
     target.draw(this->sprite);
