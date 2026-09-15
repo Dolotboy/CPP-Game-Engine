@@ -59,6 +59,14 @@ Entity2D::Entity2D(string entityName, string spriteName, double width, double he
     setTexture(spriteName);
     setSprite(this->texture);
 
+    const sf::FloatRect localBounds = this->sprite.getLocalBounds();
+    if (localBounds.width > 0.0f && localBounds.height > 0.0f)
+    {
+        this->sprite.setScale(
+            static_cast<float>(width) / localBounds.width,
+            static_cast<float>(height) / localBounds.height);
+    }
+
     this->sprite.setPosition(this->position);
 }
 
@@ -73,6 +81,12 @@ void Entity2D::setTexture(string textureName)
 void Entity2D::setSprite(const sf::Texture& texture)
 {
     this->sprite.setTexture(texture);
+}
+
+sf::Vector2f Entity2D::getSize() const
+{
+    const sf::FloatRect bounds = sprite.getGlobalBounds();
+    return sf::Vector2f(bounds.width, bounds.height);
 }
 
 

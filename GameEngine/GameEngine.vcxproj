@@ -160,6 +160,7 @@
     <ClCompile Include="Core\Gravity2D.cpp" />
     <ClCompile Include="Game\main.cpp" />
     <ClCompile Include="Game\Attack.cpp" />
+    <ClCompile Include="Game\Jump.cpp" />
     <ClCompile Include="Game\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -171,6 +172,7 @@
     <ClInclude Include="Core\Gravity2D.h" />
     <ClInclude Include="Game\Player.h" />
     <ClInclude Include="Game\Attack.h" />
+    <ClInclude Include="Game\Jump.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

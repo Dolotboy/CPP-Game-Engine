@@ -1,13 +1,27 @@
 #include "Player.h"
+#include "../Core/Game.h"
 #include <algorithm>
 #include <cmath>
 #include <utility>
 
-Player::Player(string entityName, string spriteName)
-    : Entity2D(entityName, spriteName, 32.0, 32.0), speed(200.0f)
+Player::Player(string entityName, string spriteName, double width, double height)
+    : Entity2D(entityName, spriteName, width, height), speed(200.0f)
 {
-    setPosition(100.0f, 100.0f);
+    setPosition(100.0f, getGroundY());
     setVelocity(0.0f, 0.0f);
+}
+
+float Player::getGroundY() const
+{
+    if (Game::window == nullptr)
+        return 0.0f;
+
+    return static_cast<float>(Game::window->getSize().y) - getSize().y;
+}
+
+bool Player::isGrounded() const
+{
+    return position.y >= getGroundY() && velocity.y >= 0.0f;
 }
 
 void Player::addAbility(Ability ability, std::function<void(const Ability&)> callback)
@@ -61,7 +75,7 @@ void Player::handleInput()
         moveY /= length;
     }
 
-    setVelocity(moveX * speed, moveY * speed);
+    setVelocity(moveX * speed, velocity.y);
 }
 
 void Player::update(float deltaTime)
@@ -74,5 +88,12 @@ void Player::update(float deltaTime)
             ability.activate();
     }
 
+    setVelocity(velocity.x, velocity.y + gravity * deltaTime);
     Entity2D::update(deltaTime);
+
+    if (position.y >= getGroundY())
+    {
+        setPosition(position.x, getGroundY());
+        setVelocity(velocity.x, 0.0f);
+    }
 }

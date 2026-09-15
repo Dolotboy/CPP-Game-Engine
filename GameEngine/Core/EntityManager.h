@@ -39,6 +39,7 @@ public:
     void setTexture(string textureName);
 
     void setSprite(const sf::Texture& texture);
+    sf::Vector2f getSize() const;
 
 
     void update(float deltaTime) override;

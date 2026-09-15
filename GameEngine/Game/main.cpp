@@ -2,6 +2,7 @@
 #include "../Core/EntityManager.h"
 #include "../Core/Game.h"
 #include "Attack.h"
+#include "Jump.h"
 #include "Player.h"
 #include <iostream>
 
@@ -10,7 +11,7 @@ int main()
     Game myGame(400, 400, "Game Engine Test Window");
     myGame.init();
 
-    Player player("player", "../GameEngine/Game/assets/player.png");
+    Player player("player", "../GameEngine/Game/assets/player.png", 64.0, 64.0);
 
     player.addAbility(
         Ability("attack", "Attack", AbilityControl::mouse(sf::Mouse::Button::Left),
@@ -18,8 +19,11 @@ int main()
         [](const Ability& ability) { std::cout << "Added: " << ability.getSlug() << "\n"; });
 
     player.addAbility(
-        Ability("special", "Special",
-            AbilityControl::keyboard({ sf::Keyboard::LShift, sf::Keyboard::W })));
+        Ability("special", "Special", AbilityControl::keyboard({ sf::Keyboard::LShift, sf::Keyboard::W })));
+
+    player.addAbility(
+        Ability("jump", "Jump", AbilityControl::keyboard({ sf::Keyboard::Space }),
+            [&player]() { Jump::execute(player); }));
 
     EntityManager::printAllEntities();
 
