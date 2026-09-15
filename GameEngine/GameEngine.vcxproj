@@ -152,21 +152,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Ability.cpp" />
     <ClCompile Include="Core\Collider2D.cpp" />
     <ClCompile Include="Core\Component.cpp" />
     <ClCompile Include="Core\EntityManager.cpp" />
     <ClCompile Include="Core\Game.cpp" />
     <ClCompile Include="Core\Gravity2D.cpp" />
     <ClCompile Include="Game\main.cpp" />
+    <ClCompile Include="Game\Attack.cpp" />
     <ClCompile Include="Game\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Ability.h" />
     <ClInclude Include="Core\Collider2D.h" />
     <ClInclude Include="Core\Component.h" />
     <ClInclude Include="Core\EntityManager.h" />
     <ClInclude Include="Core\Game.h" />
     <ClInclude Include="Core\Gravity2D.h" />
     <ClInclude Include="Game\Player.h" />
+    <ClInclude Include="Game\Attack.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
