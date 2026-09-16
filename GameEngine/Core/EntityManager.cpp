@@ -1,5 +1,7 @@
 #include "EntityManager.h"
 
+#include <algorithm>
+
 std::vector<Entity*> EntityManager::entities; // Need to define the static "list" otherwise you will get an unresolved external symbol error
 
 Entity::Entity(bool is2D, string entityName)
@@ -124,12 +126,50 @@ int EntityManager::generateEntityId()
 
 void EntityManager::destroyEntity(Entity* entity)
 {
-    entities.push_back(entity);
+    if (entity == nullptr)
+    {
+        return;
+    }
+
+    const auto entityIt = std::find(entities.begin(), entities.end(), entity);
+    if (entityIt == entities.end())
+    {
+        return;
+    }
+
+    entities.erase(entityIt);
 }
 
-void EntityManager::destroyEntity(int entityId)
+void EntityManager::destroyEntity(int entitiesId)
 {
-    //entities.push_back(entity);
+    const auto entityIt = std::find_if(
+        entities.begin(),
+        entities.end(),
+        [entitiesId](const Entity* entity) { return entity->entityId == entitiesId; });
+
+    if (entityIt != entities.end())
+    {
+        destroyEntity(*entityIt);
+    }
+}
+
+void EntityManager::destroyAllExcept(const std::vector<Entity*>& entitiesToKeep)
+{
+    const auto shouldKeep = [&entitiesToKeep](const Entity* entity) {
+        return std::find(entitiesToKeep.begin(), entitiesToKeep.end(), entity)
+            != entitiesToKeep.end();
+    };
+
+    for (auto entityIt = entities.begin(); entityIt != entities.end();)
+    {
+        if (shouldKeep(*entityIt))
+        {
+            ++entityIt;
+            continue;
+        }
+
+        entityIt = entities.erase(entityIt);
+    }
 }
 
 void EntityManager::renderAllEntities(sf::RenderTarget& target)

@@ -18,6 +18,7 @@ public:
 
     Entity(bool is2D, string entityName);
     Entity(string entityName);
+    virtual ~Entity() = default;
 
 
     virtual void update(float deltaTime);
@@ -64,6 +65,8 @@ public:
     static void destroyEntity(Entity* entity);
 
     static void destroyEntity(int entitiesId);
+
+    static void destroyAllExcept(const std::vector<Entity*>& entitiesToKeep);
 
     static void renderAllEntities(sf::RenderTarget& target);
 
