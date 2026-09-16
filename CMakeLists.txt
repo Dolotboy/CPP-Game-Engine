@@ -80,8 +80,19 @@ target_link_libraries(GameEngine PRIVATE
 # Output directories
 # --------------------------------------------------
 
+set(GAME_ASSETS_DIR
+    "${CMAKE_CURRENT_SOURCE_DIR}/GameEngine/Game/assets"
+    CACHE PATH "Directory containing the game's runtime assets"
+)
+
 set_target_properties(GameEngine PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+)
+
+add_custom_command(TARGET GameEngine POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${GAME_ASSETS_DIR}"
+        "$<TARGET_FILE_DIR:GameEngine>/assets"
 )
 
 # --------------------------------------------------

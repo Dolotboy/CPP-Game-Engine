@@ -53,6 +53,15 @@ sudo apt install build-essential pkg-config libsfml-dev
 
 ### Compilation
 
+#### CMake
+Depuis la racine du projet, compilez l'application dans `build/` :
+```bash
+cmake -S . -B build/linux -DCMAKE_BUILD_TYPE=Release
+cmake --build build/linux --parallel
+```
+L'executable se trouve ensuite dans `build/linux/bin/GameEngine`.
+
+#### GCC
 Depuis la racine du projet, compilez l'application dans `dist/` :
 
 ```bash
@@ -60,9 +69,39 @@ mkdir -p dist
 g++ -std=c++17 -Wall -Wextra -pedantic GameEngine/Core/*.cpp GameEngine/Game/*.cpp \
 	-o dist/game-engine \
 	$(pkg-config --cflags --libs sfml-graphics sfml-window sfml-system)
+mkdir -p dist/assets
+cp -R GameEngine/Game/assets/. dist/assets/
 ```
 
 L'executable se trouve ensuite dans `dist/game-engine`.
+
+### Chemin des assets
+
+Le chemin du sprite est fourni directement au programme. Il peut pointer vers
+n'importe quel dossier du projet ou vers un chemin absolu :
+
+```bash
+./dist/game-engine GameEngine/Game/assets/player.png
+./dist/game-engine TheGame/assets/player.png
+./dist/game-engine /chemin/vers/MyGame/images/player.png
+```
+
+Si aucun chemin n'est fourni, CMake et la procédure GCC copient le dossier
+d'assets à côté de l'exécutable et la démo charge `assets/player.png`. Le
+lancement fonctionne donc depuis n'importe quel dossier :
+
+```bash
+./build/linux/bin/GameEngine
+```
+
+Pour utiliser un autre dossier d'assets avec CMake, définissez
+`GAME_ASSETS_DIR` lors de la configuration :
+
+```bash
+cmake -S . -B build/linux \
+    -DGAME_ASSETS_DIR="$PWD/TheGame/assets" \
+    -DCMAKE_BUILD_TYPE=Release
+```
 
 ## Windows
 
