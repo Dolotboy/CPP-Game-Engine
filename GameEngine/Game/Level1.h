@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GameState.h"
+#include "../Core/GameState.h"
 #include "Player.h"
 
 #include <string>

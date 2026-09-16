@@ -1,10 +1,9 @@
 #pragma once
 
-#include "GameState.h"
+#include "../Core/GameState.h"
+#include "../Core/UIBuilder.h"
 
 #include <SFML/Graphics/Font.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/Graphics/Text.hpp>
 #include <functional>
 #include <string>
 
@@ -19,7 +18,6 @@ public:
 
 private:
     sf::Font font;
-    sf::RectangleShape playButton;
-    sf::Text playLabel;
+    UIBuilder ui;
     std::function<void()> playCallback;
 };
