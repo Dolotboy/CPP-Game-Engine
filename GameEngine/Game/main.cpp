@@ -16,13 +16,9 @@ int main(int argc, char* argv[])
     const std::string playerSpritePath = argc > 1
         ? argv[1]
         : (std::filesystem::path(argv[0]).parent_path() / "assets/sprites/player.png").string();
-    const std::string fontPath = argc > 2
-        ? argv[2]
-        : (std::filesystem::path(argv[0]).parent_path()
-            / "assets/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSans.ttf").string();
 
     bool playRequested = false;
-    std::unique_ptr<GameState> currentState = std::make_unique<MainMenu>(fontPath, [&playRequested]() { playRequested = true; });
+    std::unique_ptr<GameState> currentState = std::make_unique<MainMenu>([&playRequested]() { playRequested = true; });
 
     sf::Clock clock;
     while (Game::window->isOpen())

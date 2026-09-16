@@ -18,29 +18,46 @@ void centerText(sf::Text& text, sf::Vector2f position, sf::Vector2f size)
 }
 }
 
-UIBuilder::UIBuilder(const sf::Font* font)
-    : font(font)
-{
-}
-
-void UIBuilder::setFont(const sf::Font& newFont)
-{
-    font = &newFont;
-}
-
 void UIBuilder::clear()
 {
     drawables.clear();
+    fonts.clear();
     textures.clear();
     buttons.clear();
 }
 
+const sf::Font* UIBuilder::loadFont(const std::string& fontPath)
+{
+    if (fontPath.empty())
+    {
+        return nullptr;
+    }
+
+    const auto existingFont = fonts.find(fontPath);
+    if (existingFont != fonts.end())
+    {
+        return existingFont->second.get();
+    }
+
+    auto font = std::make_unique<sf::Font>();
+    if (!font->loadFromFile(fontPath))
+    {
+        return nullptr;
+    }
+
+    const sf::Font* loadedFont = font.get();
+    fonts.emplace(fontPath, std::move(font));
+    return loadedFont;
+}
+
 void UIBuilder::addText(
     const std::string& text,
+    const std::string& fontPath,
     sf::Vector2f position,
     unsigned int characterSize,
     sf::Color color)
 {
+    const sf::Font* font = loadFont(fontPath);
     if (font == nullptr)
     {
         return;
@@ -57,6 +74,7 @@ void UIBuilder::addText(
 
 void UIBuilder::addButton(
     const std::string& label,
+    const std::string& fontPath,
     sf::Vector2f position,
     sf::Vector2f size,
     Action action,
@@ -69,6 +87,7 @@ void UIBuilder::addButton(
     button->setFillColor(fillColor);
     drawables.push_back(std::move(button));
 
+    const sf::Font* font = loadFont(fontPath);
     if (font != nullptr)
     {
         auto buttonLabel = std::make_unique<sf::Text>();
@@ -85,6 +104,7 @@ void UIBuilder::addButton(
 
 void UIBuilder::addBubble(
     const std::string& text,
+    const std::string& fontPath,
     sf::Vector2f position,
     sf::Vector2f size,
     sf::Color fillColor,
@@ -107,6 +127,7 @@ void UIBuilder::addBubble(
     tail->setOutlineThickness(2.0f);
     drawables.push_back(std::move(tail));
 
+    const sf::Font* font = loadFont(fontPath);
     if (font != nullptr)
     {
         auto bubbleText = std::make_unique<sf::Text>();

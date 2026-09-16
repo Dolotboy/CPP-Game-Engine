@@ -2,15 +2,11 @@
 
 #include <utility>
 
-MainMenu::MainMenu(const std::string& fontPath, std::function<void()> playCallback): playCallback(std::move(playCallback))
+MainMenu::MainMenu(std::function<void()> playCallback): playCallback(std::move(playCallback))
 {
-    if (font.loadFromFile(fontPath))
-    {
-        ui.setFont(font);
-    }
-
     ui.addButton(
         "Play",
+        "assets/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSans.ttf",
         sf::Vector2f(140.0f, 170.0f),
         sf::Vector2f(120.0f, 60.0f),
         [this]()
