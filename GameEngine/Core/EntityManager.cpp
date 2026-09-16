@@ -72,6 +72,8 @@ Entity2D::Entity2D(string entityName, string spriteName, double width, double he
 
 void Entity2D::setTexture(string textureName)
 {
+    this->spriteName = textureName;
+
     if (!texture.loadFromFile(textureName))
     {
         std::cerr << "Unable to load texture: " << textureName << std::endl;
@@ -86,7 +88,10 @@ void Entity2D::setSprite(const sf::Texture& texture)
 sf::Vector2f Entity2D::getSize() const
 {
     const sf::FloatRect bounds = sprite.getGlobalBounds();
-    return sf::Vector2f(bounds.width, bounds.height);
+    if (bounds.width > 0.0f && bounds.height > 0.0f)
+        return sf::Vector2f(bounds.width, bounds.height);
+
+    return sf::Vector2f(static_cast<float>(width), static_cast<float>(height));
 }
 
 

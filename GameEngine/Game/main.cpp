@@ -11,7 +11,7 @@ int main()
     Game myGame(400, 400, "Game Engine Test Window");
     myGame.init();
 
-    Player player("player", "../GameEngine/Game/assets/player.png", 64.0, 64.0);
+    Player player("player", "assets/player.png", 64.0, 64.0);
 
     player.addAbility(
         Ability("attack", "Attack", AbilityControl::mouse(sf::Mouse::Button::Left),

@@ -33,23 +33,61 @@ Installez les composants suivants :
 - Visual Studio 2019 ou une version plus recente, avec la charge de travail **Developpement Desktop en C++** ;
 - SFML 2.6.0, en version correspondant a l'architecture choisie (`Win32` ou `x64`).
 
-Le fichier `GameEngine/GameEngine.vcxproj` utilise actuellement les chemins SFML suivants :
-
-```text
-E:\Programmation\Tools\SFML-2.6.0\include
-E:\Programmation\Tools\SFML-2.6.0\lib
+#### Installation SFML Manuelle
+1. Téléchargez les fichiers compilé SFML
+2. À la racine du projet créer un fichier `CMakeUserPresets.json` et y mettre le contenu suivant (En changeant CHEMIN_VERS_SFML)
+```cmake
+{
+    "version": 6,
+    "include": [
+        "CMakePresets.json"
+    ],
+    "configurePresets": [
+        {
+            "name": "windows-msvc",
+            "displayName": "Windows - MSVC + SFML",
+            "inherits": "windows",
+            "cacheVariables": {
+                "SFML_DIR": "CHEMIN_VERS_SFML/lib/cmake/SFML"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "windows-release-user",
+            "configurePreset": "windows-msvc",
+            "configuration": "Release"
+        },
+        {
+            "name": "windows-debug-user",
+            "configurePreset": "windows-msvc",
+            "configuration": "Debug"
+        }
+    ]
+}
 ```
-
-Si SFML est installee ailleurs, adaptez les proprietes **Additional Include Directories** et **Additional Library Directories** du projet, ainsi que les dependances de l'editeur de liens.
 
 ### Compilation avec Visual Studio
 
-Ouvrez `GameEngine.sln`, selectionnez `Release` et `x64` (ou `Win32`), puis choisissez **Build > Build Solution**.
+Ouvrez `Developper PowerShell for VS`, placez-vous dans le dossier root du projet
 
-La compilation peut aussi etre lancee depuis un **Developer Command Prompt for VS** :
+1. Effectuez la commande suivante : ```cmake --list-presets```
 
-```bat
-msbuild GameEngine.sln /p:Configuration=Release /p:Platform=x64
+Vous devriez obtenir quelque chose comme:
+```text
+Available configure presets:
+
+  "windows"
+  "windows-msvc"
 ```
+2. Effectuez la commande suivante : ```cmake --preset windows-msvc```
 
-Les fichiers generes par Visual Studio sont places dans les dossiers de sortie de la solution, par exemple `x64\Release\`.
+Vous devriez obtenir quelque chose comme:
+```text
+-- Selecting Windows SDK version ...
+-- The CXX compiler identification is MSVC ...
+-- Found SFML ...
+-- Configuring done
+-- Generating done
+```
+3. Effectuez la commande suivante : ```cmake --build --preset windows-release-user```

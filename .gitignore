@@ -1,6 +1,16 @@
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudio,c++
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudio,c++
 
+# CMake
+build/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+# Local CMake configuration
+CMakeUserPresets.json
+
 ### C++ ###
 # Prerequisites
 *.d
