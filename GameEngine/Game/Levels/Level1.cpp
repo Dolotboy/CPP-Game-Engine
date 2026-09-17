@@ -1,5 +1,6 @@
 #include "Level1.h"
 
+#include "../../Core/Game.h"
 #include "../Abilities/Attack.h"
 #include "../Abilities/Jump.h"
 #include "../Abilities/Move.h"
@@ -8,7 +9,11 @@
 
 Level1::Level1(const std::string& playerSpritePath)
     : player("player", playerSpritePath, 64.0, 64.0)
+    , barrel("barrel", "assets/sprites/barrel.png", 64.0, 64.0)
 {
+    const float groundY = static_cast<float>(Game::window->getSize().y) - barrel.getSize().y;
+    barrel.setPosition(220.0f, groundY);
+
     player.addAbility(
         Ability("attack", "Attack", AbilityControl::mouse(sf::Mouse::Button::Left),
             []() { Attack::execute(); }),
@@ -34,10 +39,11 @@ void Level1::handleEvent(const sf::Event& event)
 
 void Level1::update(float deltaTime)
 {
-    player.update(deltaTime);
+    player.update(deltaTime, { &barrel });
 }
 
 void Level1::render(sf::RenderTarget& target)
 {
+    barrel.render(target);
     player.render(target);
 }

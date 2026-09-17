@@ -25,7 +25,7 @@ public:
     virtual void render(sf::RenderTarget& target);
     virtual void printInfo();
 
-    void setPosition(float x, float y);
+    virtual void setPosition(float x, float y);
     void setVelocity(float x, float y);
 
 protected:
@@ -37,6 +37,7 @@ class Entity2D : public Entity {
 public:
     Entity2D(string entityName, string spriteName, double width, double height);
 
+    void setPosition(float x, float y) override;
     void setTexture(string textureName);
 
     void setSprite(const sf::Texture& texture);

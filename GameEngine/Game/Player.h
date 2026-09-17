@@ -1,5 +1,6 @@
 #pragma once
 #include "../Core/Ability.h"
+#include "../Core/Collider2D.h"
 #include "../Core/EntityManager.h"
 #include <functional>
 #include <string>
@@ -11,6 +12,7 @@ public:
     Player(string entityName, string spriteName, double width = 32.0, double height = 32.0);
 
     void update(float deltaTime) override;
+    void update(float deltaTime, const std::vector<const Entity2D*>& obstacles);
     bool isGrounded() const;
 
     void addAbility(Ability ability, std::function<void(const Ability&)> callback = {});
@@ -21,6 +23,7 @@ public:
 private:
     static constexpr float gravity = 1200.0f;
     std::vector<Ability> abilities;
+    bool grounded = false;
 
     float getGroundY() const;
 };

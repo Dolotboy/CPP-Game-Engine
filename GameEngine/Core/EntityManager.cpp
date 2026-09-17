@@ -72,6 +72,12 @@ Entity2D::Entity2D(string entityName, string spriteName, double width, double he
     this->sprite.setPosition(this->position);
 }
 
+void Entity2D::setPosition(float x, float y)
+{
+    Entity::setPosition(x, y);
+    this->sprite.setPosition(this->position);
+}
+
 void Entity2D::setTexture(string textureName)
 {
     this->spriteName = textureName;

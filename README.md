@@ -170,3 +170,48 @@ Vous devriez obtenir quelque chose comme:
 -- Generating done
 ```
 3. Effectuez la commande suivante : ```cmake --build --preset windows-release-user```
+
+## Core
+
+### Collision2D
+
+Le système de collision 2D est implémenté dans `Core/Collider2D`. Il utilise des
+boîtes englobantes rectangulaires (AABB) basées sur la position et la taille de
+chaque `Entity2D`.
+
+La méthode `Collider2D::resolve` compare une entité mobile avec une entité
+statique. La position de l'entité mobile avant son déplacement est conservée
+pour identifier le côté de la collision :
+
+- une collision par le haut pose l'entité mobile sur l'obstacle et remet sa
+    vitesse verticale à zéro ;
+- une collision par le bas arrête également le déplacement vertical ;
+- une collision latérale replace l'entité contre le bord de l'obstacle et remet
+    sa vitesse horizontale à zéro.
+
+La méthode retourne un `CollisionResult` indiquant si une collision a eu lieu
+et si elle correspond à un contact avec le dessus d'un obstacle (`grounded`).
+Le niveau fournit ses obstacles au joueur pendant sa mise à jour. Cela permet,
+par exemple, de traiter un barril comme une plateforme sur laquelle le joueur
+peut atterrir, ou comme un obstacle qu'il doit contourner ou franchir.
+
+### Player
+
+Le `Player` possède une liste d'`Ability`. Chaque capacité contient un identifiant,
+un nom d'affichage, un contrôle et une fonction de rappel. Une capacité peut
+être ajoutée ou supprimée avec `addAbility` et `removeAbility`.
+
+Pendant chaque mise à jour du joueur :
+
+- une capacité continue est activée tant que son contrôle est maintenu ;
+- une capacité non continue est activée une seule fois au moment où son contrôle
+    passe de relâché à pressé ;
+- la fonction de rappel de la capacité exécute l'action associée, comme le
+    déplacement, le saut ou l'attaque.
+
+L'état `grounded` indique si le joueur est posé sur le sol de la fenêtre ou sur
+le dessus d'un obstacle. Il est remis à zéro au début de chaque mise à jour,
+puis réactivé lorsqu'une collision verticale descendante est détectée ou lorsque
+le joueur atteint le sol. La capacité de saut vérifie cet état avant d'appliquer
+une vitesse verticale négative : le joueur ne peut donc pas effectuer de saut
+en l'air, mais peut sauter depuis le sol ou depuis le dessus du barril.

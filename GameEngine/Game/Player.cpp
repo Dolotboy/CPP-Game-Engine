@@ -8,6 +8,7 @@ Player::Player(string entityName, string spriteName, double width, double height
 {
     setPosition(100.0f, getGroundY());
     setVelocity(0.0f, 0.0f);
+    grounded = true;
 }
 
 float Player::getGroundY() const
@@ -20,7 +21,7 @@ float Player::getGroundY() const
 
 bool Player::isGrounded() const
 {
-    return position.y >= getGroundY() && velocity.y >= 0.0f;
+    return grounded;
 }
 
 void Player::addAbility(Ability ability, std::function<void(const Ability&)> callback)
@@ -55,18 +56,36 @@ const std::vector<Ability>& Player::getAbilities() const
 
 void Player::update(float deltaTime)
 {
+    update(deltaTime, {});
+}
+
+void Player::update(float deltaTime, const std::vector<const Entity2D*>& obstacles)
+{
     for (Ability& ability : abilities)
     {
         if (ability.isContinuous() ? ability.isActive() : ability.isTriggered())
             ability.activate();
     }
 
+    const sf::Vector2f previousPosition = position;
+    grounded = false;
     setVelocity(velocity.x, velocity.y + gravity * deltaTime);
     Entity2D::update(deltaTime);
+
+    for (const Entity2D* obstacle : obstacles)
+    {
+        if (obstacle == nullptr)
+            continue;
+
+        const Collider2D::CollisionResult collision =
+            Collider2D::resolve(*this, *obstacle, previousPosition);
+        grounded = grounded || collision.grounded;
+    }
 
     if (position.y >= getGroundY())
     {
         setPosition(position.x, getGroundY());
         setVelocity(velocity.x, 0.0f);
+        grounded = true;
     }
 }

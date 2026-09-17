@@ -16,4 +16,5 @@ public:
 
 private:
     Player player;
+    Entity2D barrel;
 };
