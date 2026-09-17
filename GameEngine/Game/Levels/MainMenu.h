@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Core/GameState.h"
-#include "../Core/UIBuilder.h"
+#include "../../Core/GameState.h"
+#include "../../Core/UIBuilder.h"
 
 #include <functional>
 

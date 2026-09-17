@@ -1,11 +1,10 @@
 #include "Player.h"
 #include "../Core/Game.h"
 #include <algorithm>
-#include <cmath>
 #include <utility>
 
 Player::Player(string entityName, string spriteName, double width, double height)
-    : Entity2D(entityName, spriteName, width, height), speed(200.0f)
+    : Entity2D(entityName, spriteName, width, height)
 {
     setPosition(100.0f, getGroundY());
     setVelocity(0.0f, 0.0f);
@@ -54,37 +53,11 @@ const std::vector<Ability>& Player::getAbilities() const
     return abilities;
 }
 
-void Player::handleInput()
-{
-    float moveX = 0.0f;
-    float moveY = 0.0f;
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-        moveX -= 1.0f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-        moveX += 1.0f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-        moveY -= 1.0f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-        moveY += 1.0f;
-
-    if (moveX != 0.0f || moveY != 0.0f)
-    {
-        float length = std::sqrt(moveX * moveX + moveY * moveY);
-        moveX /= length;
-        moveY /= length;
-    }
-
-    setVelocity(moveX * speed, velocity.y);
-}
-
 void Player::update(float deltaTime)
 {
-    handleInput();
-
     for (Ability& ability : abilities)
     {
-        if (ability.isTriggered())
+        if (ability.isContinuous() ? ability.isActive() : ability.isTriggered())
             ability.activate();
     }
 

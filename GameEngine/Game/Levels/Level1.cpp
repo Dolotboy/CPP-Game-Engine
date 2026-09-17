@@ -1,7 +1,8 @@
 #include "Level1.h"
 
-#include "Attack.h"
-#include "Jump.h"
+#include "../Abilities/Attack.h"
+#include "../Abilities/Jump.h"
+#include "../Abilities/Move.h"
 
 #include <iostream>
 
@@ -20,6 +21,10 @@ Level1::Level1(const std::string& playerSpritePath)
     player.addAbility(
         Ability("jump", "Jump", AbilityControl::keyboard({ sf::Keyboard::Space }),
             [this]() { Jump::execute(player); }));
+
+    player.addAbility(
+        Ability("move", "Move", AbilityControl::always(),
+            [this]() { Move::execute(player); }, true));
 }
 
 void Level1::handleEvent(const sf::Event& event)

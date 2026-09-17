@@ -7,6 +7,11 @@ AbilityControl AbilityControl::keyboard(std::vector<sf::Keyboard::Key> keys)
     return AbilityControl(Type::Keyboard, std::move(keys), sf::Mouse::Button::Left);
 }
 
+AbilityControl AbilityControl::always()
+{
+    return AbilityControl(Type::Always, {}, sf::Mouse::Button::Left);
+}
+
 AbilityControl AbilityControl::mouse(sf::Mouse::Button button)
 {
     return AbilityControl(Type::Mouse, {}, button);
@@ -20,6 +25,9 @@ AbilityControl::AbilityControl(Type controlType, std::vector<sf::Keyboard::Key> 
 
 bool AbilityControl::isPressed() const
 {
+    if (type == Type::Always)
+        return true;
+
     if (type == Type::Mouse)
         return sf::Mouse::isButtonPressed(mouseButton);
 
@@ -33,9 +41,10 @@ bool AbilityControl::isPressed() const
 }
 
 Ability::Ability(std::string abilitySlug, std::string abilityDisplayName,
-    AbilityControl abilityControl, std::function<void()> abilityCallback)
+        AbilityControl abilityControl, std::function<void()> abilityCallback, bool isContinuous)
     : slug(std::move(abilitySlug)), displayName(std::move(abilityDisplayName)),
-      control(std::move(abilityControl)), callback(std::move(abilityCallback))
+            control(std::move(abilityControl)), callback(std::move(abilityCallback)),
+            continuous(isContinuous)
 {
 }
 
@@ -45,6 +54,16 @@ bool Ability::isTriggered()
     const bool triggered = pressed && !wasPressed;
     wasPressed = pressed;
     return triggered;
+}
+
+bool Ability::isActive() const
+{
+    return control.isPressed();
+}
+
+bool Ability::isContinuous() const
+{
+    return continuous;
 }
 
 void Ability::activate() const

@@ -11,10 +11,12 @@ class AbilityControl
 public:
     enum class Type
     {
+        Always,
         Keyboard,
         Mouse
     };
 
+    static AbilityControl always();
     static AbilityControl keyboard(std::vector<sf::Keyboard::Key> keys);
     static AbilityControl mouse(sf::Mouse::Button button);
 
@@ -33,9 +35,12 @@ class Ability
 {
 public:
     Ability(std::string abilitySlug, std::string abilityDisplayName,
-        AbilityControl abilityControl, std::function<void()> abilityCallback = {});
+        AbilityControl abilityControl, std::function<void()> abilityCallback = {},
+        bool continuous = false);
 
     bool isTriggered();
+    bool isActive() const;
+    bool isContinuous() const;
     void activate() const;
 
     const std::string& getSlug() const;
@@ -46,5 +51,6 @@ private:
     std::string displayName;
     AbilityControl control;
     std::function<void()> callback;
+    bool continuous;
     bool wasPressed = false;
 };

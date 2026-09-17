@@ -1,7 +1,7 @@
 #include "../Core/Game.h"
 #include "../Core/LevelManager.h"
-#include "Level1.h"
-#include "MainMenu.h"
+#include "Levels/Level1.h"
+#include "Levels/MainMenu.h"
 
 #include <SFML/Graphics.hpp>
 #include <filesystem>
