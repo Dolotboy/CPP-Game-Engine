@@ -1,7 +1,7 @@
 #pragma once
-#include "../Core/Ability.h"
-#include "../Core/Collider2D.h"
-#include "../Core/EntityManager.h"
+#include "Ability.h"
+#include "Collider2D.h"
+#include "EntityManager.h"
 #include <functional>
 #include <string>
 #include <vector>

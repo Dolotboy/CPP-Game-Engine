@@ -1,6 +1,6 @@
 #include "Move.h"
 
-#include "../Player.h"
+#include "../../Core/Player.h"
 
 #include <SFML/Window/Keyboard.hpp>
 #include <cmath>

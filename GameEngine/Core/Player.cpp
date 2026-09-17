@@ -1,5 +1,5 @@
 #include "Player.h"
-#include "../Core/Game.h"
+#include "Game.h"
 #include <algorithm>
 #include <utility>
 

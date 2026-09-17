@@ -4,8 +4,8 @@
 
 Le projet est séparé en deux grandes parties :
 
-- `GameEngine/Core` : contient le moteur et les composants réutilisables. C'est la base technique du moteur : entités, composants, logique de jeu, gestion des capacités, fenêtre, etc.
-- `GameEngine/Game` : contient une démo de jeu concrète, qui sert d'exemple d'utilisation du moteur. Ici, on trouve les éléments liés au gameplay : `Player`, `Jump`, `Attack`, `main.cpp`, ainsi que les assets.
+- `GameEngine/Core` : contient le moteur et les composants réutilisables. C'est la base technique du moteur : entités, composants, `Player`, logique de jeu, gestion des capacités, fenêtre, etc.
+- `GameEngine/Game` : contient une démo de jeu concrète, qui sert d'exemple d'utilisation du moteur. Ici, on trouve les éléments liés au gameplay : `Jump`, `Attack`, `main.cpp`, ainsi que les assets.
 
 Cette séparation permet d'avoir un moteur générique qui reste réutilisable, tout en gardant un exemple de jeu fonctionnel dans le dossier `Game`. Ce dossier peut être remplacé, supprimé ou modifié selon le projet final : il s'agit d'une démo de démonstration, pas d'une couche obligatoire du moteur.
 
@@ -18,13 +18,13 @@ GameEngine/
 │   ├── EntityManager.h
 │   ├── Game.cpp
 │   ├── Game.h
+│   ├── Player.cpp
+│   ├── Player.h
 │   ├── Ability.cpp
 │   ├── Ability.h
 │   └── ...
 ├── Game/
 │   ├── main.cpp
-│   ├── Player.cpp
-│   ├── Player.h
 │   ├── Jump.cpp
 │   ├── Jump.h
 │   ├── Attack.cpp
