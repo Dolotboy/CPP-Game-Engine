@@ -173,6 +173,15 @@ Vous devriez obtenir quelque chose comme:
 
 ## Core
 
+### EntityManager
+
+Les entités peuvent être créées directement par `EntityManager` avec
+`addEntity<EntityType>(...)`. Le manager conserve leur ownership, les ajoute à
+la liste globale des entités et retourne un pointeur vers l'instance créée.
+L'identifiant retourné par `entityId` permet ensuite de retrouver une entité
+avec `getEntity<EntityType>(entityId)`, sans devoir déclarer chaque entité comme
+un membre du header d'un niveau.
+
 ### Collision2D
 
 Le système de collision 2D est implémenté dans `Core/Collider2D`. Il utilise des

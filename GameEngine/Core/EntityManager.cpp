@@ -3,6 +3,7 @@
 #include <algorithm>
 
 std::vector<Entity*> EntityManager::entities; // Need to define the static "list" otherwise you will get an unresolved external symbol error
+std::vector<std::unique_ptr<Entity>> EntityManager::ownedEntities;
 
 Entity::Entity(bool is2D, string entityName)
 {
@@ -130,6 +131,16 @@ int EntityManager::generateEntityId()
     return id;
 }
 
+Entity* EntityManager::getEntity(int entityId)
+{
+    const auto entityIt = std::find_if(
+        entities.begin(),
+        entities.end(),
+        [entityId](const Entity* entity) { return entity->entityId == entityId; });
+
+    return entityIt != entities.end() ? *entityIt : nullptr;
+}
+
 void EntityManager::destroyEntity(Entity* entity)
 {
     if (entity == nullptr)
@@ -144,6 +155,16 @@ void EntityManager::destroyEntity(Entity* entity)
     }
 
     entities.erase(entityIt);
+
+    const auto ownedEntityIt = std::find_if(
+        ownedEntities.begin(),
+        ownedEntities.end(),
+        [entity](const std::unique_ptr<Entity>& ownedEntity) {
+            return ownedEntity.get() == entity;
+        });
+
+    if (ownedEntityIt != ownedEntities.end())
+        ownedEntities.erase(ownedEntityIt);
 }
 
 void EntityManager::destroyEntity(int entitiesId)
@@ -174,7 +195,18 @@ void EntityManager::destroyAllExcept(const std::vector<Entity*>& entitiesToKeep)
             continue;
         }
 
+        Entity* entity = *entityIt;
         entityIt = entities.erase(entityIt);
+
+        const auto ownedEntityIt = std::find_if(
+            ownedEntities.begin(),
+            ownedEntities.end(),
+            [entity](const std::unique_ptr<Entity>& ownedEntity) {
+                return ownedEntity.get() == entity;
+            });
+
+        if (ownedEntityIt != ownedEntities.end())
+            ownedEntities.erase(ownedEntityIt);
     }
 }
 

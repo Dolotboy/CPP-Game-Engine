@@ -15,6 +15,6 @@ public:
     void render(sf::RenderTarget& target) override;
 
 private:
-    Player player;
-    Entity2D barrel;
+    int playerId = -1;
+    int barrelId = -1;
 };

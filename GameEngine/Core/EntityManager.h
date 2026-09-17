@@ -7,6 +7,9 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <memory>
+#include <type_traits>
+#include <utility>
 
 using namespace std;
 class Entity {
@@ -61,6 +64,26 @@ class EntityManager {
 public:
     static std::vector<Entity*> entities;
 
+    template <typename EntityType, typename... Arguments>
+    static EntityType* addEntity(Arguments&&... arguments)
+    {
+        static_assert(std::is_base_of<Entity, EntityType>::value,
+            "EntityType must inherit from Entity");
+
+        auto entity = std::make_unique<EntityType>(std::forward<Arguments>(arguments)...);
+        EntityType* entityPointer = entity.get();
+        ownedEntities.push_back(std::move(entity));
+        return entityPointer;
+    }
+
+    static Entity* getEntity(int entityId);
+
+    template <typename EntityType>
+    static EntityType* getEntity(int entityId)
+    {
+        return dynamic_cast<EntityType*>(getEntity(entityId));
+    }
+
     static int generateEntityId();
 
     static void destroyEntity(Entity* entity);
@@ -74,5 +97,6 @@ public:
     static void printAllEntities();
 
 private:
+    static std::vector<std::unique_ptr<Entity>> ownedEntities;
 };
 
