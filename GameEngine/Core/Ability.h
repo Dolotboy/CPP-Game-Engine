@@ -18,17 +18,19 @@ public:
 
     static AbilityControl always();
     static AbilityControl keyboard(std::vector<sf::Keyboard::Key> keys);
+    static AbilityControl keyboardAny(std::vector<sf::Keyboard::Key> keys);
     static AbilityControl mouse(sf::Mouse::Button button);
 
     bool isPressed() const;
 
 private:
     AbilityControl(Type controlType, std::vector<sf::Keyboard::Key> controlKeys,
-        sf::Mouse::Button button);
+        sf::Mouse::Button button, bool requireAllKeys);
 
     Type type;
     std::vector<sf::Keyboard::Key> keys;
     sf::Mouse::Button mouseButton;
+    bool requireAllKeys;
 };
 
 class Ability

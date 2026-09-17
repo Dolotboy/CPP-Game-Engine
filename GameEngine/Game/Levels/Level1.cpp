@@ -28,7 +28,9 @@ Level1::Level1(const std::string& playerSpritePath)
             AbilityControl::keyboard({ sf::Keyboard::LShift, sf::Keyboard::W })));
 
     player->addAbility(
-        Ability("jump", "Jump", AbilityControl::keyboard({ sf::Keyboard::Space }),
+            Ability("jump", "Jump",
+                AbilityControl::keyboardAny({ sf::Keyboard::Space, sf::Keyboard::W,
+                    sf::Keyboard::Up }),
             [this]()
             {
                 if (Player* player = EntityManager::getEntity<Player>(playerId))
