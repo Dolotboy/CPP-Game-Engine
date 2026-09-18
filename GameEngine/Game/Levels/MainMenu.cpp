@@ -26,9 +26,8 @@ void MainMenu::handleEvent(const sf::Event& event)
     ui.handleEvent(event);
 }
 
-void MainMenu::update(float deltaTime)
+void MainMenu::update(float)
 {
-    (void)deltaTime;
 }
 
 void MainMenu::render(sf::RenderTarget& target)

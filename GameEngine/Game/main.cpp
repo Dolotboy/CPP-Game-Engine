@@ -1,6 +1,7 @@
 #include "../Core/Game.h"
 #include "../Core/LevelManager.h"
 #include "Levels/Level1.h"
+#include "Levels/Level2.h"
 #include "Levels/MainMenu.h"
 
 #include <SFML/Graphics.hpp>
@@ -42,13 +43,18 @@ int main(int argc, char* argv[])
                 [&](const std::vector<Entity*>& entitiesToKeep)
                 {
                     (void)entitiesToKeep;
-                    currentState = std::make_unique<Level1>(playerSpritePath);
+                    currentState = std::make_unique<Level1>(playerSpritePath,
+                        [&](const std::vector<Entity*>&)
+                        {
+                            currentState = std::make_unique<Level2>(playerSpritePath);
+                        });
                 });
         }
 
         const float deltaTime = clock.restart().asSeconds();
         currentState->update(deltaTime);
         EntityManager::updateAllEntities(deltaTime);
+        LevelManager::processPendingChange();
 
         Game::window->clear(sf::Color(28, 35, 48));
         currentState->render(*Game::window);

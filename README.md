@@ -444,6 +444,46 @@ Les méthodes `OnCollision`, `OnCollisionEnter`, `OnCollisionStay` et
 `OnCollisionExit` sont appelées par le moteur. `setOnCollision` ajoute un
 callback fonctionnel pratique pour les cas simples.
 
+### Portail et changement de niveau
+
+`Portal` accepte une fabrique de niveau dans son constructeur. Cette fabrique
+est stockée dans le portail et appelée lorsqu'un `Player` entre en collision avec
+lui :
+
+```cpp
+Portal(
+    "portal",
+    "assets/sprites/blue_portal.png",
+    48.0, 48.0,
+    300.0f, groundY,
+    true,
+    nextLevel
+);
+```
+
+Le type du dernier paramètre est `LevelManager::LevelFactory` :
+
+```cpp
+using LevelFactory = std::function<void(const std::vector<Entity*>&)>;
+```
+
+Le paramètre contient les entités conservées lors du changement de niveau. La
+transition est demandée pendant `OnCollision`, puis exécutée à la fin de la
+frame afin de ne pas modifier la liste des entités pendant sa détection.
+
+Exemple de liaison dans `main.cpp` :
+
+```cpp
+currentState = std::make_unique<Level1>(playerSpritePath,
+    [&](const std::vector<Entity*>&)
+    {
+        currentState = std::make_unique<Level2>(playerSpritePath);
+    });
+```
+
+Le portail ne déclenche la fabrique que pour l'état
+`CollisionInfo::State::Enter` et si `collision.other` est un `Player`.
+
 ### Player
 
 Le `Player` possède une liste d'`Ability`. Chaque capacité contient un identifiant,

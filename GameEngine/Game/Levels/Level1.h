@@ -2,13 +2,15 @@
 
 #include "../../Core/GameState.h"
 #include "../../Core/Player.h"
+#include "../../Core/LevelManager.h"
 
 #include <string>
 
 class Level1 : public GameState
 {
 public:
-    explicit Level1(const std::string& playerSpritePath);
+    Level1(const std::string& playerSpritePath,
+        LevelManager::LevelFactory nextLevel = {});
 
     void handleEvent(const sf::Event& event) override;
     void update(float deltaTime) override;

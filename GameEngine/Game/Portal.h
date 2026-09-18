@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Core/EntityManager.h"
+#include "../Core/LevelManager.h"
 
 #include <string>
 
@@ -13,7 +14,11 @@ public:
         double height = 64.0,
         float x = 0.0f,
         float y = 0.0f,
-        bool useCollision = true);
+        bool useCollision = true,
+        LevelManager::LevelFactory nextLevel = {});
 
     void OnCollision(const CollisionInfo& collision) override;
+
+private:
+    LevelManager::LevelFactory nextLevel;
 };

@@ -14,6 +14,12 @@ public:
         const LevelFactory& instantiateLevel,
         const std::vector<Entity*>& entitiesToKeep = {});
 
+    static void requestChangeLevel(
+        const LevelFactory& instantiateLevel,
+        const std::vector<Entity*>& entitiesToKeep = {});
+
+    static void processPendingChange();
+
 private:
     LevelManager() = delete;
 };
