@@ -4,19 +4,30 @@
 #include "../Abilities/Attack.h"
 #include "../Abilities/Jump.h"
 #include "../Abilities/Move.h"
+#include "../Portal.h"
 
 #include <iostream>
 
 Level1::Level1(const std::string& playerSpritePath)
 {
-    Player* player = EntityManager::addEntity<Player>("player", playerSpritePath, 64.0, 64.0);
-    Entity2D* barrel = EntityManager::addEntity<Entity2D>(
-        "barrel", "assets/sprites/barrel.png", 64.0, 64.0);
+    const float groundY = static_cast<float>(Game::window->getSize().y) - 64.0f;
+    Player* player = EntityManager::addEntity<Player>("player", playerSpritePath, 64.0, 64.0, 25.0f, groundY, true);
+    Entity2D* barrel = EntityManager::addEntity<Entity2D>("barrel", "assets/sprites/barrel.png", 64.0, 64.0, 150.0f, groundY, true);
+    EntityManager::addEntity<Portal>("portal", "assets/sprites/blue_portal.png", 48.0, 48.0, 300.0f, groundY, true);
+    
     playerId = player->entityId;
-    barrelId = barrel->entityId;
 
-    const float groundY = static_cast<float>(Game::window->getSize().y) - barrel->getSize().y;
-    barrel->setPosition(220.0f, groundY);
+    barrel->setOnCollision([this](const CollisionInfo& collision)
+    {
+        if (collision.state == CollisionInfo::State::Enter)
+             std::cout << "Barrel enter" << std::endl;
+
+        if (collision.state == CollisionInfo::State::Exit)
+            std::cout << "Barrel exit" << std::endl;
+
+        if (dynamic_cast<const Player*>(&collision.other) != nullptr)
+            std::cout << "Barrel collides with Player" << std::endl;
+    });
 
     player->addAbility(
         Ability("attack", "Attack", AbilityControl::mouse(sf::Mouse::Button::Left),
@@ -46,23 +57,14 @@ Level1::Level1(const std::string& playerSpritePath)
             }, true));
 }
 
-void Level1::handleEvent(const sf::Event& event)
+void Level1::handleEvent(const sf::Event&)
 {
-    (void)event;
 }
 
-void Level1::update(float deltaTime)
+void Level1::update(float)
 {
-    Player* player = EntityManager::getEntity<Player>(playerId);
-    Entity2D* barrel = EntityManager::getEntity<Entity2D>(barrelId);
-    if (player != nullptr && barrel != nullptr)
-        player->update(deltaTime, { barrel });
 }
 
-void Level1::render(sf::RenderTarget& target)
+void Level1::render(sf::RenderTarget&)
 {
-    if (Entity2D* barrel = EntityManager::getEntity<Entity2D>(barrelId))
-        barrel->render(target);
-    if (Player* player = EntityManager::getEntity<Player>(playerId))
-        player->render(target);
 }

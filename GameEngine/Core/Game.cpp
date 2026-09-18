@@ -30,11 +30,7 @@ void Game::update()
 	while (window->isOpen())
 	{
 		float deltaTime = clock.restart().asSeconds();
-
-		for (auto& entity : EntityManager::entities)
-		{
-			entity->update(deltaTime);
-		}
+		EntityManager::updateAllEntities(deltaTime);
 
 		window->clear();
 		render();
@@ -44,7 +40,5 @@ void Game::update()
 
 void Game::render()
 {
-
 	EntityManager::renderAllEntities(*window);
-
 }

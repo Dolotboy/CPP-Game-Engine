@@ -3,10 +3,12 @@
 #include <algorithm>
 #include <utility>
 
-Player::Player(string entityName, string spriteName, double width, double height)
-    : Entity2D(entityName, spriteName, width, height)
+Player::Player(string entityName, string spriteName, double width, double height,
+    float x, float y, bool useCollision)
+    : Entity2D(entityName, spriteName, width, height, x, y, useCollision)
 {
-    setPosition(100.0f, getGroundY());
+    if (x == 0.0f && y == 0.0f)
+        setPosition(100.0f, getGroundY());
     setVelocity(0.0f, 0.0f);
     grounded = true;
 }
@@ -22,6 +24,11 @@ float Player::getGroundY() const
 bool Player::isGrounded() const
 {
     return grounded;
+}
+
+void Player::setGrounded(bool value)
+{
+    grounded = value;
 }
 
 void Player::addAbility(Ability ability, std::function<void(const Ability&)> callback)
@@ -59,7 +66,7 @@ void Player::update(float deltaTime)
     update(deltaTime, {});
 }
 
-void Player::update(float deltaTime, const std::vector<const Entity2D*>& obstacles)
+void Player::update(float deltaTime, const std::vector<Entity2D*>& obstacles)
 {
     for (Ability& ability : abilities)
     {
@@ -72,7 +79,7 @@ void Player::update(float deltaTime, const std::vector<const Entity2D*>& obstacl
     setVelocity(velocity.x, velocity.y + gravity * deltaTime);
     Entity2D::update(deltaTime);
 
-    for (const Entity2D* obstacle : obstacles)
+    for (Entity2D* obstacle : obstacles)
     {
         if (obstacle == nullptr)
             continue;

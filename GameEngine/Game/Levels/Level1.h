@@ -16,5 +16,4 @@ public:
 
 private:
     int playerId = -1;
-    int barrelId = -1;
 };

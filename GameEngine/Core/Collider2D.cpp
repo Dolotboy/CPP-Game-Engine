@@ -3,7 +3,7 @@
 #include <algorithm>
 
 Collider2D::CollisionResult Collider2D::resolve(Entity2D& movingEntity,
-	const Entity2D& staticEntity, const sf::Vector2f& previousPosition)
+	Entity2D& staticEntity, const sf::Vector2f& previousPosition)
 {
 	const sf::Vector2f movingSize = movingEntity.getSize();
 	const sf::Vector2f staticSize = staticEntity.getSize();
@@ -72,5 +72,7 @@ Collider2D::CollisionResult Collider2D::resolve(Entity2D& movingEntity,
 	}
 
 	result.collided = true;
+	movingEntity.triggerOnCollision(staticEntity);
+	staticEntity.triggerOnCollision(movingEntity);
 	return result;
 }

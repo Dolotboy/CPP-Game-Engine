@@ -13,7 +13,7 @@ public:
 	};
 
 	static CollisionResult resolve(Entity2D& movingEntity,
-		const Entity2D& staticEntity, const sf::Vector2f& previousPosition);
+		Entity2D& staticEntity, const sf::Vector2f& previousPosition);
 
 private:
 	Collider2D() : Component("Collider2D") {}

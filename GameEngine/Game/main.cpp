@@ -46,10 +46,13 @@ int main(int argc, char* argv[])
                 });
         }
 
-        currentState->update(clock.restart().asSeconds());
+        const float deltaTime = clock.restart().asSeconds();
+        currentState->update(deltaTime);
+        EntityManager::updateAllEntities(deltaTime);
 
         Game::window->clear(sf::Color(28, 35, 48));
         currentState->render(*Game::window);
+        EntityManager::renderAllEntities(*Game::window);
         Game::window->display();
     }
 
