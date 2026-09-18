@@ -4,6 +4,7 @@
 #include "../../Core/Player.h"
 #include "../../Core/LevelManager.h"
 
+#include <memory>
 #include <string>
 
 class Level1 : public GameState
@@ -17,4 +18,6 @@ public:
 
 private:
     int playerId = -1;
+    int barrelId = -1;
+    std::shared_ptr<int> barrelTouchCount = std::make_shared<int>(0);
 };

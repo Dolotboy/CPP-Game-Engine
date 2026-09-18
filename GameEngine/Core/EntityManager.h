@@ -13,6 +13,7 @@
 #include <type_traits>
 #include <utility>
 #include <unordered_map>
+#include <optional>
 
 using namespace std;
 class Entity2D;
@@ -128,6 +129,11 @@ public:
 
     static void destroyAllExcept(const std::vector<Entity*>& entitiesToKeep);
 
+    static void dontDestroyOnLoad(Entity* entity,
+        std::optional<sf::Vector2f> position = std::nullopt);
+    static const std::vector<Entity*>& getDontDestroyOnLoadEntities();
+    static void removeDontDestroyOnLoad(Entity* entity);
+
     static void renderAllEntities(sf::RenderTarget& target);
     static void updateAllEntities(float deltaTime);
     static void updateCollisions();
@@ -136,6 +142,8 @@ public:
 
 private:
     static std::vector<std::unique_ptr<Entity>> ownedEntities;
+    static std::vector<Entity*> dontDestroyOnLoadEntities;
+    static std::unordered_map<int, std::optional<sf::Vector2f>> persistentPositions;
     static std::unordered_map<int, sf::Vector2f> previousPositions;
 };
 

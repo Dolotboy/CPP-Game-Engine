@@ -5,6 +5,8 @@
 
 std::vector<Entity*> EntityManager::entities; // Need to define the static "list" otherwise you will get an unresolved external symbol error
 std::vector<std::unique_ptr<Entity>> EntityManager::ownedEntities;
+std::vector<Entity*> EntityManager::dontDestroyOnLoadEntities;
+std::unordered_map<int, std::optional<sf::Vector2f>> EntityManager::persistentPositions;
 std::unordered_map<int, sf::Vector2f> EntityManager::previousPositions;
 
 Entity::Entity(bool is2D, string entityName, float x, float y)
@@ -225,6 +227,8 @@ void EntityManager::destroyEntity(Entity* entity)
     }
 
     entities.erase(entityIt);
+    removeDontDestroyOnLoad(entity);
+    persistentPositions.erase(entity->entityId);
 
     const auto ownedEntityIt = std::find_if(
         ownedEntities.begin(),
@@ -253,8 +257,11 @@ void EntityManager::destroyEntity(int entitiesId)
 void EntityManager::destroyAllExcept(const std::vector<Entity*>& entitiesToKeep)
 {
     const auto shouldKeep = [&entitiesToKeep](const Entity* entity) {
-        return std::find(entitiesToKeep.begin(), entitiesToKeep.end(), entity)
+        const bool explicitlyKept = std::find(entitiesToKeep.begin(), entitiesToKeep.end(), entity)
             != entitiesToKeep.end();
+        const bool persistent = std::find(dontDestroyOnLoadEntities.begin(),
+            dontDestroyOnLoadEntities.end(), entity) != dontDestroyOnLoadEntities.end();
+        return explicitlyKept || persistent;
     };
 
     for (auto entityIt = entities.begin(); entityIt != entities.end();)
@@ -267,6 +274,7 @@ void EntityManager::destroyAllExcept(const std::vector<Entity*>& entitiesToKeep)
 
         Entity* entity = *entityIt;
         entityIt = entities.erase(entityIt);
+        persistentPositions.erase(entity->entityId);
 
         const auto ownedEntityIt = std::find_if(
             ownedEntities.begin(),
@@ -278,6 +286,44 @@ void EntityManager::destroyAllExcept(const std::vector<Entity*>& entitiesToKeep)
         if (ownedEntityIt != ownedEntities.end())
             ownedEntities.erase(ownedEntityIt);
     }
+
+    for (Entity* entity : dontDestroyOnLoadEntities)
+    {
+        if (entity == nullptr)
+            continue;
+
+        const auto position = persistentPositions.find(entity->entityId);
+        if (position != persistentPositions.end() && position->second.has_value())
+            entity->setPosition(position->second->x, position->second->y);
+    }
+}
+
+void EntityManager::dontDestroyOnLoad(
+    Entity* entity,
+    std::optional<sf::Vector2f> position)
+{
+    if (entity == nullptr)
+        return;
+
+    if (std::find(dontDestroyOnLoadEntities.begin(),
+        dontDestroyOnLoadEntities.end(), entity) == dontDestroyOnLoadEntities.end())
+    {
+        dontDestroyOnLoadEntities.push_back(entity);
+    }
+
+    persistentPositions[entity->entityId] = position;
+}
+
+const std::vector<Entity*>& EntityManager::getDontDestroyOnLoadEntities()
+{
+    return dontDestroyOnLoadEntities;
+}
+
+void EntityManager::removeDontDestroyOnLoad(Entity* entity)
+{
+    dontDestroyOnLoadEntities.erase(
+        std::remove(dontDestroyOnLoadEntities.begin(), dontDestroyOnLoadEntities.end(), entity),
+        dontDestroyOnLoadEntities.end());
 }
 
 void EntityManager::renderAllEntities(sf::RenderTarget& target)

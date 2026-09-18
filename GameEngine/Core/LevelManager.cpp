@@ -14,11 +14,13 @@ void LevelManager::changeLevel(
     const LevelFactory& instantiateLevel,
     const std::vector<Entity*>& entitiesToKeep)
 {
-    EntityManager::destroyAllExcept(entitiesToKeep);
+    std::vector<Entity*> entitiesToPreserve = EntityManager::getDontDestroyOnLoadEntities();
+    entitiesToPreserve.insert(entitiesToPreserve.end(), entitiesToKeep.begin(), entitiesToKeep.end());
+    EntityManager::destroyAllExcept(entitiesToPreserve);
 
     if (instantiateLevel)
     {
-        instantiateLevel(entitiesToKeep);
+        instantiateLevel(entitiesToPreserve);
     }
 }
 

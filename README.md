@@ -262,6 +262,43 @@ Entity* anyEntity = EntityManager::getEntity(playerId);
 Le manager fournit également `destroyEntity(entity)`,
 `destroyEntity(entityId)` et `destroyAllExcept(entitiesToKeep)`.
 
+#### Entités persistantes entre les niveaux
+
+Pour conserver une entité comme avec Unity `DontDestroyOnLoad`, il suffit de
+l'ajouter à la liste du moteur :
+
+```cpp
+EntityManager::dontDestroyOnLoad(player);
+EntityManager::dontDestroyOnLoad(barrel);
+```
+
+Lors d'un changement de niveau, ces entités ne sont pas détruites, restent dans
+`EntityManager`, continuent d'être mises à jour et sont automatiquement rendues
+dans le niveau suivant. Il ne faut pas les recréer ni leur réattribuer leurs
+capacités.
+
+Par défaut, leur position actuelle est conservée :
+
+```cpp
+EntityManager::dontDestroyOnLoad(player);
+```
+
+Une nouvelle position peut être demandée pour le prochain niveau :
+
+```cpp
+EntityManager::dontDestroyOnLoad(player, sf::Vector2f(100.0f, 200.0f));
+```
+
+Pour les replacer en `(0, 0)` :
+
+```cpp
+EntityManager::dontDestroyOnLoad(player, sf::Vector2f(0.0f, 0.0f));
+```
+
+La liste complète est accessible avec
+`EntityManager::getDontDestroyOnLoadEntities()`. Une entité peut en être retirée
+avec `EntityManager::removeDontDestroyOnLoad(entity)`.
+
 #### Rendu automatique
 
 Le moteur appelle `EntityManager::renderAllEntities(...)`. Une entité héritant
@@ -490,6 +527,18 @@ currentState = std::make_unique<Level1>(playerSpritePath, typeid(Level2));
 
 Le portail ne déclenche la fabrique que pour l'état
 `CollisionInfo::State::Enter` et si `collision.other` est un `Player`.
+
+Lorsqu'un portail déclenche un changement de niveau, `LevelManager` conserve
+automatiquement toutes les entités enregistrées avec `dontDestroyOnLoad`. Le
+portail n'a donc pas besoin de recevoir la liste du joueur et du barrel :
+
+```cpp
+EntityManager::addEntity<Portal>(
+    "portal", "assets/sprites/blue_portal.png",
+    48.0, 48.0, 300.0f, groundY, true,
+    typeid(Level2)
+);
+```
 
 ### Player
 
