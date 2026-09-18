@@ -12,9 +12,9 @@ Portal::Portal(const std::string& entityName,
     float x,
     float y,
     bool useCollision,
-    LevelManager::LevelFactory nextLevel)
+    LevelManager::LevelType nextLevel)
     : Entity2D(entityName, spriteName, width, height, x, y, useCollision),
-    nextLevel(std::move(nextLevel))
+            nextLevel(nextLevel)
 {
 }
 
@@ -28,7 +28,7 @@ void Portal::OnCollision(const CollisionInfo& collision)
 
     if (collision.state == CollisionInfo::State::Enter
         && dynamic_cast<const Player*>(&collision.other) != nullptr
-        && nextLevel)
+        && nextLevel != typeid(void))
     {
         std::cout << "Portal collides with Player" << std::endl;
         LevelManager::requestChangeLevel(nextLevel);

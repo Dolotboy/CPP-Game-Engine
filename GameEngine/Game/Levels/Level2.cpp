@@ -5,7 +5,7 @@
 #include "../Abilities/Move.h"
 #include "../../Core/Player.h"
 
-Level2::Level2(const std::string& playerSpritePath)
+Level2::Level2()
 {
 }
 

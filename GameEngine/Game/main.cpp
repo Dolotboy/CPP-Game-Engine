@@ -21,6 +21,12 @@ int main(int argc, char* argv[])
     bool playRequested = false;
     std::unique_ptr<GameState> currentState = std::make_unique<MainMenu>([&playRequested]() { playRequested = true; });
 
+    LevelManager::registerLevel(typeid(Level2),
+        [&](const std::vector<Entity*>&)
+        {
+            currentState = std::make_unique<Level2>();
+        });
+
     sf::Clock clock;
     while (Game::window->isOpen())
     {
@@ -43,11 +49,7 @@ int main(int argc, char* argv[])
                 [&](const std::vector<Entity*>& entitiesToKeep)
                 {
                     (void)entitiesToKeep;
-                    currentState = std::make_unique<Level1>(playerSpritePath,
-                        [&](const std::vector<Entity*>&)
-                        {
-                            currentState = std::make_unique<Level2>(playerSpritePath);
-                        });
+                    currentState = std::make_unique<Level1>(typeid(Level2));
                 });
         }
 

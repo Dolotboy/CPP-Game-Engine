@@ -9,8 +9,7 @@
 class Level1 : public GameState
 {
 public:
-    Level1(const std::string& playerSpritePath,
-        LevelManager::LevelFactory nextLevel = {});
+    Level1(LevelManager::LevelType nextLevel = typeid(void));
 
     void handleEvent(const sf::Event& event) override;
     void update(float deltaTime) override;

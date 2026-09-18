@@ -446,9 +446,8 @@ callback fonctionnel pratique pour les cas simples.
 
 ### Portail et changement de niveau
 
-`Portal` accepte une fabrique de niveau dans son constructeur. Cette fabrique
-est stockée dans le portail et appelée lorsqu'un `Player` entre en collision avec
-lui :
+`Portal` accepte le type C++ du niveau cible dans son constructeur. La syntaxe
+est volontairement courte, proche d'un `typeof` :
 
 ```cpp
 Portal(
@@ -457,28 +456,36 @@ Portal(
     48.0, 48.0,
     300.0f, groundY,
     true,
-    nextLevel
+    typeid(Level2)
 );
 ```
 
-Le type du dernier paramètre est `LevelManager::LevelFactory` :
+Le type du dernier paramètre est `LevelManager::LevelType`, un alias de
+`std::type_index` :
 
 ```cpp
-using LevelFactory = std::function<void(const std::vector<Entity*>&)>;
+using LevelType = std::type_index;
 ```
 
-Le paramètre contient les entités conservées lors du changement de niveau. La
-transition est demandée pendant `OnCollision`, puis exécutée à la fin de la
-frame afin de ne pas modifier la liste des entités pendant sa détection.
+Le niveau doit être enregistré une seule fois dans `LevelManager`, avec la
+fabrique qui sait l'instancier :
+
+```cpp
+LevelManager::registerLevel(typeid(Level2),
+    [&](const std::vector<Entity*>&)
+    {
+        currentState = std::make_unique<Level2>();
+    });
+```
+
+Le portail demande ensuite simplement `typeid(Level2)`. La transition est
+exécutée à la fin de la frame afin de ne pas modifier la liste des entités
+pendant sa détection.
 
 Exemple de liaison dans `main.cpp` :
 
 ```cpp
-currentState = std::make_unique<Level1>(playerSpritePath,
-    [&](const std::vector<Entity*>&)
-    {
-        currentState = std::make_unique<Level2>(playerSpritePath);
-    });
+currentState = std::make_unique<Level1>(playerSpritePath, typeid(Level2));
 ```
 
 Le portail ne déclenche la fabrique que pour l'état

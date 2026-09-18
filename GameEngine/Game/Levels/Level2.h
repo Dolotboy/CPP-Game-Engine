@@ -7,7 +7,7 @@
 class Level2 : public GameState
 {
 public:
-    explicit Level2(const std::string& playerSpritePath);
+    explicit Level2();
 
     void handleEvent(const sf::Event& event) override;
     void update(float deltaTime) override;

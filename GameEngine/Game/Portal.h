@@ -15,10 +15,10 @@ public:
         float x = 0.0f,
         float y = 0.0f,
         bool useCollision = true,
-        LevelManager::LevelFactory nextLevel = {});
+        LevelManager::LevelType nextLevel = typeid(void));
 
     void OnCollision(const CollisionInfo& collision) override;
 
 private:
-    LevelManager::LevelFactory nextLevel;
+    LevelManager::LevelType nextLevel;
 };
