@@ -17,8 +17,12 @@ public:
         bool useCollision = true,
         LevelManager::LevelType nextLevel = typeid(void));
 
+    void update(float deltaTime) override;
     void OnCollision(const CollisionInfo& collision) override;
+    void OnCollisionEnter(const Entity2D& other) override;
+    void OnCollisionExit(const Entity2D& other) override;
 
 private:
     LevelManager::LevelType nextLevel;
+    bool isReady = false;
 };

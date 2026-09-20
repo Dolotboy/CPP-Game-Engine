@@ -26,11 +26,30 @@ void Portal::OnCollision(const CollisionInfo& collision)
     if (collision.state == CollisionInfo::State::Exit)
         std::cout << "Portal exit" << std::endl;
 
-    if (collision.state == CollisionInfo::State::Enter
-        && dynamic_cast<const Player*>(&collision.other) != nullptr
-        && nextLevel != typeid(void))
+    if (collision.state == CollisionInfo::State::Enter && dynamic_cast<const Player*>(&collision.other) != nullptr)
     {
         std::cout << "Portal collides with Player" << std::endl;
-        LevelManager::requestChangeLevel(nextLevel);
     }
+}
+
+void Portal::OnCollisionEnter(const Entity2D& other)
+{
+    if(dynamic_cast<const Player*>(&other) != nullptr && nextLevel != typeid(void))
+    {
+        isReady = true;
+    }
+}
+
+void Portal::OnCollisionExit(const Entity2D& other)
+{
+    if(dynamic_cast<const Player*>(&other) != nullptr && nextLevel != typeid(void))
+    {
+        isReady = false;
+    }
+}
+
+void Portal::update(float deltaTime)
+{
+    if (isReady && sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+        LevelManager::requestChangeLevel(nextLevel);
 }

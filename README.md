@@ -44,8 +44,11 @@ Les fichiers du dossier `Game` peuvent être retirés ou remplacés si vous souh
 
 ### Dependances
 
-Installez GCC, `pkg-config` et les bibliotheques de developpement SFML :
+#### Installer CMake
+1. ```sudo apt update```
+2. ```sudo apt install cmake```
 
+#### Installez GCC, `pkg-config` et les bibliotheques de developpement SFML :
 ```bash
 sudo apt update
 sudo apt install build-essential pkg-config libsfml-dev
