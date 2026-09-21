@@ -68,11 +68,21 @@ void Level1::handleEvent(const sf::Event&)
 
 void Level1::update(float)
 {
-    if (*barrelTouchCount >= 3)
+    Entity2D* barrel = EntityManager::getEntity<Entity2D>(barrelId);
+    if (barrel == nullptr)
+        return;
+
+    if (!barrelBreaking && *barrelTouchCount >= 3)
     {
-        EntityManager::destroyEntity(EntityManager::getEntity(barrelId));
+        barrelBreaking = true;
+        barrel->setUseCollision(false);
+        barrel->animation.start(
+            "assets/sprites/breakableBarrel01.png", 8, 4, 0.08f, false);
         *barrelTouchCount = 0;
     }
+
+    if (barrelBreaking && !barrel->animation.isPlaying())
+        EntityManager::destroyEntity(barrel);
 }
 
 void Level1::render(sf::RenderTarget&)

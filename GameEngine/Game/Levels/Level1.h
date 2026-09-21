@@ -20,4 +20,5 @@ private:
     int playerId = -1;
     int barrelId = -1;
     std::shared_ptr<int> barrelTouchCount = std::make_shared<int>(0);
+    bool barrelBreaking = false;
 };
