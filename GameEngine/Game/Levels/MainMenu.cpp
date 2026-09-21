@@ -4,7 +4,8 @@
 
 MainMenu::MainMenu(std::function<void()> playCallback): playCallback(std::move(playCallback))
 {
-    ui.addButton(
+    UIBuilder::clear();
+    UIBuilder::addButton(
         "Play",
         "assets/fonts/dejavu-fonts-ttf-2.37/ttf/DejaVuSans.ttf",
         sf::Vector2f(140.0f, 170.0f),
@@ -23,7 +24,7 @@ MainMenu::MainMenu(std::function<void()> playCallback): playCallback(std::move(p
 
 void MainMenu::handleEvent(const sf::Event& event)
 {
-    ui.handleEvent(event);
+    UIBuilder::handleEvent(event);
 }
 
 void MainMenu::update(float)
@@ -32,5 +33,5 @@ void MainMenu::update(float)
 
 void MainMenu::render(sf::RenderTarget& target)
 {
-    ui.render(target);
+    (void)target;
 }

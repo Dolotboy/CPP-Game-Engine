@@ -83,27 +83,20 @@ void EntityManager::destroyAllExcept(const std::vector<Entity*>& entitiesToKeep)
         return explicitlyKept || persistent;
     };
 
-    for (auto entityIt = entities.begin(); entityIt != entities.end();)
+    std::vector<Entity*> entitiesToDestroy;
+    entitiesToDestroy.reserve(entities.size());
+
+    for (Entity* entity : entities)
     {
-        if (shouldKeep(*entityIt))
-        {
-            ++entityIt;
+        if (shouldKeep(entity))
             continue;
-        }
 
-        Entity* entity = *entityIt;
-        entityIt = entities.erase(entityIt);
-        persistentPositions.erase(entity->entityId);
+        entitiesToDestroy.push_back(entity);
+    }
 
-        const auto ownedEntityIt = std::find_if(
-            ownedEntities.begin(),
-            ownedEntities.end(),
-            [entity](const std::unique_ptr<Entity>& ownedEntity) {
-                return ownedEntity.get() == entity;
-            });
-
-        if (ownedEntityIt != ownedEntities.end())
-            ownedEntities.erase(ownedEntityIt);
+    for (Entity* entity : entitiesToDestroy)
+    {
+        destroyEntity(entity);
     }
 
     for (Entity* entity : dontDestroyOnLoadEntities)

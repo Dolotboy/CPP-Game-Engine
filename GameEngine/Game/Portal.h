@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Core/EntityManager.h"
 #include "../Core/LevelManager.h"
+#include "../Core/UIBuilder.h"
 
 #include <string>
 
@@ -16,7 +16,6 @@ public:
         float y = 0.0f,
         bool useCollision = true,
         LevelManager::LevelType nextLevel = typeid(void));
-
     void update(float deltaTime) override;
     void OnCollision(const CollisionInfo& collision) override;
     void OnCollisionEnter(const Entity2D& other) override;

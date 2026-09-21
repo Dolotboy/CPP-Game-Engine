@@ -37,6 +37,11 @@ void Portal::OnCollisionEnter(const Entity2D& other)
     if(dynamic_cast<const Player*>(&other) != nullptr && nextLevel != typeid(void))
     {
         isReady = true;
+
+        UIBuilder::addImage(
+            "assets/sprites/e_key.png",
+            sf::Vector2f(position.x, position.y - 40.0f),
+            sf::Vector2f(32.0f, 32.0f));
     }
 }
 
@@ -45,11 +50,14 @@ void Portal::OnCollisionExit(const Entity2D& other)
     if(dynamic_cast<const Player*>(&other) != nullptr && nextLevel != typeid(void))
     {
         isReady = false;
+        UIBuilder::clear();
     }
 }
 
 void Portal::update(float deltaTime)
 {
+    (void)deltaTime;
+
     if (isReady && sf::Keyboard::isKeyPressed(sf::Keyboard::E))
         LevelManager::requestChangeLevel(nextLevel);
 }

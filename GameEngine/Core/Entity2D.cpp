@@ -45,6 +45,8 @@ void Entity2D::setPosition(float x, float y)
 void Entity2D::setTexture(string textureName)
 {
 	this->spriteName = textureName;
+	if (textureName.empty())
+		return;
 
 	if (!texture.loadFromFile(textureName))
 	{

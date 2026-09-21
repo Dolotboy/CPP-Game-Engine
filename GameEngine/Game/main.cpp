@@ -59,7 +59,6 @@ int main(int argc, char* argv[])
         LevelManager::processPendingChange();
 
         Game::window->clear(sf::Color(28, 35, 48));
-        currentState->render(*Game::window);
         EntityManager::renderAllEntities(*Game::window);
         Game::window->display();
     }
