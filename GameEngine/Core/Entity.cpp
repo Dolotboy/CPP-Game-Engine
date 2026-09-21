@@ -24,6 +24,7 @@ Entity::Entity(string entityName, float x, float y)
 void Entity::update(float deltaTime)
 {
 	this->position += this->velocity * deltaTime;
+	this->animation.update(deltaTime);
 }
 
 void Entity::setPosition(float x, float y)

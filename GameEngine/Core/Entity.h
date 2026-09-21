@@ -1,4 +1,5 @@
 #pragma once
+#include "Animation.h"
 #include <iostream>
 #include <string>
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -23,6 +24,8 @@ public:
 
 	virtual void setPosition(float x, float y);
 	void setVelocity(float x, float y);
+
+	Animation animation;
 
 protected:
 	bool is2D;

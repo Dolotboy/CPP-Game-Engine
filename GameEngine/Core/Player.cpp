@@ -29,6 +29,9 @@ bool Player::isGrounded() const
 void Player::setGrounded(bool value)
 {
     grounded = value;
+
+    if (grounded)
+        animation.stop();
 }
 
 void Player::addAbility(Ability ability, std::function<void(const Ability&)> callback)
@@ -75,7 +78,7 @@ void Player::update(float deltaTime, const std::vector<Entity2D*>& obstacles)
     }
 
     const sf::Vector2f previousPosition = position;
-    grounded = false;
+    setGrounded(false);
     setVelocity(velocity.x, velocity.y + gravity * deltaTime);
     Entity2D::update(deltaTime);
 
@@ -86,13 +89,13 @@ void Player::update(float deltaTime, const std::vector<Entity2D*>& obstacles)
 
         const Collider2D::CollisionResult collision =
             Collider2D::resolve(*this, *obstacle, previousPosition);
-        grounded = grounded || collision.grounded;
+        setGrounded(grounded || collision.grounded);
     }
 
     if (position.y >= getGroundY())
     {
         setPosition(position.x, getGroundY());
         setVelocity(velocity.x, 0.0f);
-        grounded = true;
+        setGrounded(true);
     }
 }

@@ -130,6 +130,33 @@ void Entity2D::triggerOnCollisionExit(const Entity2D& other)
 void Entity2D::update(float deltaTime)
 {
 	Entity::update(deltaTime);
+	if (animation.isPlaying())
+	{
+		const sf::Texture* animationTexture = animation.getTexture();
+		if (animationTexture != nullptr)
+		{
+			this->sprite.setTexture(*animationTexture);
+			const sf::IntRect& textureRect = animation.getTextureRect();
+			this->sprite.setTextureRect(textureRect);
+			if (textureRect.width > 0 && textureRect.height > 0)
+			{
+				this->sprite.setScale(
+					static_cast<float>(width) / static_cast<float>(textureRect.width),
+					static_cast<float>(height) / static_cast<float>(textureRect.height));
+			}
+		}
+	}
+	else if (animation.isConfigured())
+	{
+		this->sprite.setTexture(this->texture, true);
+		const sf::FloatRect localBounds = this->sprite.getLocalBounds();
+		if (localBounds.width > 0.0f && localBounds.height > 0.0f)
+		{
+			this->sprite.setScale(
+				static_cast<float>(width) / localBounds.width,
+				static_cast<float>(height) / localBounds.height);
+		}
+	}
 	this->sprite.setPosition(this->position);
 }
 
