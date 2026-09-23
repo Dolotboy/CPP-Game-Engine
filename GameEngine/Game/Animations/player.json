@@ -5,291 +5,351 @@
   "animations": [
     {
       "name": "Spellcast_Back",
-      "row": 0
+      "row": 0,
+      "columns": 7,
+      "reverse": false
     },
     {
       "name": "Spellcast_Left",
-      "row": 1
+      "row": 1,
+      "columns": 7,
+      "reverse": false
     },
     {
       "name": "Spellcast_Front",
-      "row": 2
+      "row": 2,
+      "columns": 7,
+      "reverse": false
     },
     {
       "name": "Spellcast_Right",
-      "row": 3
+      "row": 3,
+      "columns": 7,
+      "reverse": false
     },
     {
       "name": "Thrust_Back",
-      "row": 4
+      "row": 4,
+      "columns": 8,
+      "reverse": false
     },
     {
       "name": "Thrust_Left",
-      "row": 5
+      "row": 5,
+      "columns": 8,
+      "reverse": false
     },
     {
       "name": "Thrust_Front",
-      "row": 6
+      "row": 6,
+      "columns": 8,
+      "reverse": false
     },
     {
       "name": "Thrust_Right",
-      "row": 7
+      "row": 7,
+      "columns": 8,
+      "reverse": false
     },
     {
       "name": "Walk_Back",
-      "row": 8
+      "row": 8,
+      "columns": 9,
+      "reverse": false
     },
     {
       "name": "Walk_Left",
-      "row": 9
+      "row": 9,
+      "columns": 9,
+      "reverse": false
     },
     {
       "name": "Walk_Front",
-      "row": 10
+      "row": 10,
+      "columns": 9,
+      "reverse": false
     },
     {
       "name": "Walk_Right",
-      "row": 11
+      "row": 11,
+      "columns": 9,
+      "reverse": false
     },
     {
       "name": "Slash_Back",
-      "row": 12
+      "row": 12,
+      "columns": 6,
+      "reverse": false
     },
     {
       "name": "Slash_Left",
-      "row": 13
+      "row": 13,
+      "columns": 6,
+      "reverse": false
     },
     {
       "name": "Slash_Front",
-      "row": 14
+      "row": 14,
+      "columns": 6,
+      "reverse": false
     },
     {
       "name": "Slash_Right",
-      "row": 15
+      "row": 15,
+      "columns": 6,
+      "reverse": false
     },
     {
       "name": "Shoot_Back",
-      "row": 16
+      "row": 16,
+      "columns": 13,
+      "reverse": false
     },
     {
       "name": "Shoot_Left",
-      "row": 17
+      "row": 17,
+      "columns": 13,
+      "reverse": false
     },
     {
       "name": "Shoot_Front",
-      "row": 18
+      "row": 18,
+      "columns": 13,
+      "reverse": false
     },
     {
       "name": "Shoot_Right",
-      "row": 19
-    },
-    {
-      "name": "Hurt_Back",
-      "row": 20
-    },
-    {
-      "name": "Hurt_Left",
-      "row": 21
+      "row": 19,
+      "columns": 13,
+      "reverse": false
     },
     {
       "name": "Hurt_Front",
-      "row": 22
-    },
-    {
-      "name": "Hurt_Right",
-      "row": 23
+      "row": 20,
+      "columns": 6,
+      "reverse": false
     },
     {
       "name": "Climb_Back",
-      "row": 24
-    },
-    {
-      "name": "Climb_Left",
-      "row": 25
-    },
-    {
-      "name": "Climb_Front",
-      "row": 26
-    },
-    {
-      "name": "Climb_Right",
-      "row": 27
+      "row": 21,
+      "columns": 6,
+      "reverse": false
     },
     {
       "name": "Idle_Back",
-      "row": 28
+      "row": 22,
+      "columns": 2,
+      "reverse": false
     },
     {
       "name": "Idle_Left",
-      "row": 29
+      "row": 23,
+      "columns": 2,
+      "reverse": false
     },
     {
       "name": "Idle_Front",
-      "row": 30
+      "row": 24,
+      "columns": 2,
+      "reverse": false
     },
     {
       "name": "Idle_Right",
-      "row": 31
+      "row": 25,
+      "columns": 2,
+      "reverse": false
     },
     {
       "name": "Jump_Back",
-      "row": 32
+      "row": 26,
+      "columns": 5,
+      "reverse": false
     },
     {
       "name": "Jump_Left",
-      "row": 33
+      "row": 27,
+      "columns": 5,
+      "reverse": false
     },
     {
       "name": "Jump_Front",
-      "row": 34
+      "row": 28,
+      "columns": 5,
+      "reverse": false
     },
     {
       "name": "Jump_Right",
-      "row": 35
+      "row": 29,
+      "columns": 5,
+      "reverse": false
     },
     {
       "name": "Sit_Back",
-      "row": 36
+      "row": 30,
+      "columns": 3,
+      "reverse": false
     },
     {
       "name": "Sit_Left",
-      "row": 37
+      "row": 31,
+      "columns": 3,
+      "reverse": false
     },
     {
       "name": "Sit_Front",
-      "row": 38
+      "row": 32,
+      "columns": 3,
+      "reverse": false
     },
     {
       "name": "Sit_Right",
-      "row": 39
+      "row": 33,
+      "columns": 3,
+      "reverse": false
     },
     {
       "name": "Emote_Back",
-      "row": 40
+      "row": 34,
+      "columns": 3,
+      "reverse": false
     },
     {
       "name": "Emote_Left",
-      "row": 41
+      "row": 35,
+      "columns": 3,
+      "reverse": false
     },
     {
       "name": "Emote_Front",
-      "row": 42
+      "row": 36,
+      "columns": 3,
+      "reverse": false
     },
     {
       "name": "Emote_Right",
-      "row": 43
-    },
-    {
-      "name": "Death_Back",
-      "row": 44
-    },
-    {
-      "name": "Death_Left",
-      "row": 45
-    },
-    {
-      "name": "Death_Front",
-      "row": 46
-    },
-    {
-      "name": "Death_Right",
-      "row": 47
+      "row": 37,
+      "columns": 3,
+      "reverse": false
     },
     {
       "name": "Run_Back",
-      "row": 48
+      "row": 38,
+      "columns": 8,
+      "reverse": false
     },
     {
       "name": "Run_Left",
-      "row": 49
+      "row": 39,
+      "columns": 8,
+      "reverse": false
     },
     {
       "name": "Run_Front",
-      "row": 50
+      "row": 40,
+      "columns": 8,
+      "reverse": false
     },
     {
       "name": "Run_Right",
-      "row": 51
-    },
-    {
-      "name": "Watering_Back",
-      "row": 52
-    },
-    {
-      "name": "Watering_Left",
-      "row": 53
-    },
-    {
-      "name": "Watering_Front",
-      "row": 54
-    },
-    {
-      "name": "Watering_Right",
-      "row": 55
+      "row": 41,
+      "columns": 8,
+      "reverse": false
     },
     {
       "name": "Combat Idle_Back",
-      "row": 56
+      "row": 42,
+      "columns": 2,
+      "reverse": false
     },
     {
       "name": "Combat Idle_Left",
-      "row": 57
+      "row": 43,
+      "columns": 2,
+      "reverse": false
     },
     {
       "name": "Combat Idle_Front",
-      "row": 58
+      "row": 44,
+      "columns": 2,
+      "reverse": false
     },
     {
       "name": "Combat Idle_Right",
-      "row": 59
+      "row": 45,
+      "columns": 2,
+      "reverse": false
     },
     {
       "name": "1-Handed Slash_Back",
-      "row": 60
+      "row": 46,
+      "columns": 13,
+      "reverse": false
     },
     {
       "name": "1-Handed Slash_Left",
-      "row": 61
+      "row": 47,
+      "columns": 13,
+      "reverse": false
     },
     {
       "name": "1-Handed Slash_Front",
-      "row": 62
+      "row": 48,
+      "columns": 13,
+      "reverse": false
     },
     {
       "name": "1-Handed Slash_Right",
-      "row": 63
+      "row": 49,
+      "columns": 13,
+      "reverse": false
     },
     {
       "name": "1-Handed Backslash_Back",
-      "row": 64
+      "row": 46,
+      "columns": 13,
+      "reverse": true
     },
     {
       "name": "1-Handed Backslash_Left",
-      "row": 65
+      "row": 47,
+      "columns": 13,
+      "reverse": true
     },
     {
       "name": "1-Handed Backslash_Front",
-      "row": 66
+      "row": 48,
+      "columns": 13,
+      "reverse": true
     },
     {
       "name": "1-Handed Backslash_Right",
-      "row": 67
+      "row": 49,
+      "columns": 13,
+      "reverse": true
     },
     {
       "name": "1-Handed Halfslash_Back",
-      "row": 68
+      "row": 50,
+      "columns": 6,
+      "reverse": false
     },
     {
       "name": "1-Handed Halfslash_Left",
-      "row": 69
+      "row": 51,
+      "columns": 6,
+      "reverse": false
     },
     {
       "name": "1-Handed Halfslash_Front",
-      "row": 70
+      "row": 52,
+      "columns": 6,
+      "reverse": false
     },
     {
       "name": "1-Handed Halfslash_Right",
-      "row": 71
+      "row": 53,
+      "columns": 6,
+      "reverse": false
     }
   ]
 }
