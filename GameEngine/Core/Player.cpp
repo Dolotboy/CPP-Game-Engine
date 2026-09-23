@@ -4,9 +4,12 @@
 #include <utility>
 
 Player::Player(string entityName, string spriteName, double width, double height,
-    float x, float y, bool useCollision)
+    float x, float y, bool useCollision, const std::string& animationPath)
     : Entity2D(entityName, spriteName, width, height, x, y, useCollision)
 {
+    if (!animationPath.empty())
+        registerAnimation(animationPath);
+
     if (x == 0.0f && y == 0.0f)
         setPosition(100.0f, getGroundY());
     setVelocity(0.0f, 0.0f);

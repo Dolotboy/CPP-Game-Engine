@@ -1,6 +1,7 @@
 #include "Animation.h"
 
 #include <iostream>
+#include <memory>
 #include <utility>
 
 bool Animation::configure(const std::vector<std::string>& framePaths,
@@ -9,13 +10,13 @@ bool Animation::configure(const std::vector<std::string>& framePaths,
     if (framePaths.empty() || newFrameDuration <= 0.0f)
         return false;
 
-    std::vector<sf::Texture> loadedTextures;
+    std::vector<std::shared_ptr<sf::Texture>> loadedTextures;
     loadedTextures.reserve(framePaths.size());
 
     for (const std::string& framePath : framePaths)
     {
-        sf::Texture texture;
-        if (!texture.loadFromFile(framePath))
+        auto texture = std::make_shared<sf::Texture>();
+        if (!texture->loadFromFile(framePath))
         {
             std::cerr << "Unable to load animation frame: " << framePath << std::endl;
             return false;
@@ -27,9 +28,9 @@ bool Animation::configure(const std::vector<std::string>& framePaths,
     textures = std::move(loadedTextures);
     textureRects.clear();
     textureRects.reserve(textures.size());
-    for (const sf::Texture& texture : textures)
+    for (const std::shared_ptr<sf::Texture>& texture : textures)
     {
-        const sf::Vector2u size = texture.getSize();
+        const sf::Vector2u size = texture->getSize();
         textureRects.emplace_back(0, 0,
             static_cast<int>(size.x), static_cast<int>(size.y));
     }
@@ -63,7 +64,7 @@ bool Animation::configureSpriteSheet(const std::string& spriteSheetPath,
         return false;
 
     textures.clear();
-    textures.push_back(std::move(texture));
+    textures.push_back(std::make_shared<sf::Texture>(std::move(texture)));
     textureRects.clear();
     textureRects.reserve(static_cast<std::size_t>(columns) * rows);
     for (unsigned int row = 0; row < rows; ++row)
@@ -76,6 +77,59 @@ bool Animation::configureSpriteSheet(const std::string& spriteSheetPath,
                 static_cast<int>(frameWidth),
                 static_cast<int>(frameHeight));
         }
+    }
+
+    frameDuration = newFrameDuration;
+    loop = newLoop;
+    currentFrame = 0;
+    elapsedTime = 0.0f;
+    playing = false;
+    return true;
+}
+
+bool Animation::configureSpriteSheetRow(const std::string& spriteSheetPath,
+    unsigned int columns, unsigned int rows, unsigned int row,
+    unsigned int frameCount, float newFrameDuration, bool newLoop, bool reverse)
+{
+    if (spriteSheetPath.empty() || columns == 0 || rows == 0 || row >= rows ||
+        frameCount == 0 || frameCount > columns || newFrameDuration <= 0.0f)
+        return false;
+
+    sf::Texture texture;
+    if (!texture.loadFromFile(spriteSheetPath))
+    {
+        std::cerr << "Unable to load animation sprite sheet: " << spriteSheetPath << std::endl;
+        return false;
+    }
+
+    return configureSpriteSheetRow(std::make_shared<sf::Texture>(std::move(texture)),
+        columns, rows, row, frameCount, newFrameDuration, newLoop, reverse);
+}
+
+bool Animation::configureSpriteSheetRow(const std::shared_ptr<sf::Texture>& spriteSheet,
+    unsigned int columns, unsigned int rows, unsigned int row,
+    unsigned int frameCount, float newFrameDuration, bool newLoop, bool reverse)
+{
+    if (!spriteSheet || columns == 0 || rows == 0 || row >= rows ||
+        frameCount == 0 || frameCount > columns || newFrameDuration <= 0.0f)
+        return false;
+
+    const sf::Vector2u size = spriteSheet->getSize();
+    const unsigned int frameWidth = size.x / columns;
+    const unsigned int frameHeight = size.y / rows;
+    if (frameWidth == 0 || frameHeight == 0)
+        return false;
+
+    textures.clear();
+    textures.push_back(spriteSheet);
+    textureRects.clear();
+    textureRects.reserve(frameCount);
+    for (unsigned int frame = 0; frame < frameCount; ++frame)
+    {
+        const unsigned int column = reverse ? frameCount - 1 - frame : frame;
+        textureRects.emplace_back(static_cast<int>(column * frameWidth),
+            static_cast<int>(row * frameHeight), static_cast<int>(frameWidth),
+            static_cast<int>(frameHeight));
     }
 
     frameDuration = newFrameDuration;
@@ -181,7 +235,7 @@ bool Animation::isPlaying() const
 
 const sf::Texture* Animation::getTexture() const
 {
-    return isConfigured() ? &textures.front() : nullptr;
+    return isConfigured() ? textures.front().get() : nullptr;
 }
 
 const sf::IntRect& Animation::getTextureRect() const

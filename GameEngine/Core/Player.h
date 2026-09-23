@@ -10,7 +10,8 @@ class Player : public Entity2D
 {
 public:
     Player(string entityName, string spriteName, double width = 32.0, double height = 32.0,
-        float x = 0.0f, float y = 0.0f, bool useCollision = true);
+        float x = 0.0f, float y = 0.0f, bool useCollision = true,
+        const std::string& animationPath = "");
 
     void update(float deltaTime) override;
     void update(float deltaTime, const std::vector<Entity2D*>& obstacles);
@@ -29,4 +30,3 @@ private:
 
     float getGroundY() const;
 };
-

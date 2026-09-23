@@ -13,6 +13,6 @@ void Jump::execute(Player& player)
     if (player.isGrounded())
     {
         player.setVelocity(player.velocity.x, jumpVelocity);
-        player.animation.start("assets/sprites/penitent_jump_anim.png", 4, 2, 0.12f);
+        player.startAnimation("Jump_Left");
     }
 }

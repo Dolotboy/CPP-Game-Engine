@@ -11,7 +11,7 @@
 Level1::Level1(LevelManager::LevelType nextLevel)
 {
     const float groundY = static_cast<float>(Game::window->getSize().y) - 64.0f;
-    Player* player = EntityManager::addEntity<Player>("player", "assets/sprites/player.png", 64.0, 64.0, 25.0f, groundY, true);
+    Player* player = EntityManager::addEntity<Player>("player", "assets/sprites/player_spritesheet.png", 64.0, 64.0, 25.0f, groundY, true, "Animations/player.json");
     Entity2D* barrel = EntityManager::addEntity<Entity2D>("barrel", "assets/sprites/barrel2.png", 64.0, 64.0, 150.0f, groundY, true);
     EntityManager::addEntity<Portal>("portal", "assets/sprites/blue_portal.png", 48.0, 48.0, 300.0f, groundY, true, nextLevel);
 

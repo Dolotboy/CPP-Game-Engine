@@ -2,6 +2,7 @@
 #include "Animation.h"
 #include <iostream>
 #include <string>
+#include <unordered_map>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/System/Vector2.hpp>
 
@@ -21,6 +22,8 @@ public:
 	virtual void update(float deltaTime);
 	virtual void render(sf::RenderTarget& target);
 	virtual void printInfo();
+	bool registerAnimation(const std::string& animationPath);
+	bool startAnimation(const std::string& animationName);
 
 	virtual void setPosition(float x, float y);
 	void setVelocity(float x, float y);
@@ -30,4 +33,5 @@ public:
 protected:
 	bool is2D;
 	string entityName;
+	std::unordered_map<std::string, Animation> registeredAnimations;
 };

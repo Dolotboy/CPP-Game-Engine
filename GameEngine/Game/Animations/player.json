@@ -1,7 +1,7 @@
 {
   "spritePath": "assets/sprites/player_spritesheet.png",
-  "columns": 4,
-  "rows": 17,
+  "columns": 13,
+  "rows": 54,
   "animations": [
     {
       "name": "Spellcast_Back",

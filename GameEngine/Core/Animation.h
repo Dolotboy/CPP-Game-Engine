@@ -4,6 +4,7 @@
 #include <SFML/Graphics/Texture.hpp>
 
 #include <string>
+#include <memory>
 #include <vector>
 
 class Animation
@@ -14,6 +15,14 @@ public:
     bool configureSpriteSheet(const std::string& spriteSheetPath,
         unsigned int columns, unsigned int rows,
         float frameDuration = 0.1f, bool loop = true);
+    bool configureSpriteSheetRow(const std::string& spriteSheetPath,
+        unsigned int columns, unsigned int rows, unsigned int row,
+        unsigned int frameCount, float frameDuration = 0.1f,
+        bool loop = true, bool reverse = false);
+    bool configureSpriteSheetRow(const std::shared_ptr<sf::Texture>& spriteSheet,
+        unsigned int columns, unsigned int rows, unsigned int row,
+        unsigned int frameCount, float frameDuration = 0.1f,
+        bool loop = true, bool reverse = false);
 
     void start();
     bool start(const std::vector<std::string>& framePaths,
@@ -35,7 +44,7 @@ public:
     const sf::IntRect& getTextureRect() const;
 
 private:
-    std::vector<sf::Texture> textures;
+    std::vector<std::shared_ptr<sf::Texture>> textures;
     std::vector<sf::IntRect> textureRects;
     float frameDuration = 0.1f;
     float elapsedTime = 0.0f;
