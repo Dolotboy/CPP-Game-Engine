@@ -24,6 +24,15 @@ void Move::execute(Player& player)
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
         moveY += 1.0f;
 
+    if (moveX < 0.0f)
+        player.setDirection(Player::Direction::Left);
+    else if (moveX > 0.0f)
+        player.setDirection(Player::Direction::Right);
+    else if (moveY < 0.0f)
+        player.setDirection(Player::Direction::Back);
+    else if (moveY > 0.0f)
+        player.setDirection(Player::Direction::Front);
+
     if (moveX != 0.0f || moveY != 0.0f)
     {
         const float length = std::sqrt(moveX * moveX + moveY * moveY);
@@ -31,4 +40,18 @@ void Move::execute(Player& player)
     }
 
     player.setVelocity(moveX * movementSpeed, player.velocity.y);
+
+    if (player.velocity.y < 0.0f)
+    {
+        player.startAnimation(std::string("Jump_") + player.getDirectionName());
+        return;
+    }
+
+    // Keep the jump animation in the air; choose the facing walk/idle animation on the ground.
+    if (player.isGrounded() && player.velocity.y >= 0.0f)
+    {
+        const std::string animationName =
+            std::string(moveX != 0.0f ? "Walk_" : "Idle_") + player.getDirectionName();
+        player.startAnimation(animationName);
+    }
 }

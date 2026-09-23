@@ -34,4 +34,5 @@ protected:
 	bool is2D;
 	string entityName;
 	std::unordered_map<std::string, Animation> registeredAnimations;
+	std::string activeAnimationName;
 };

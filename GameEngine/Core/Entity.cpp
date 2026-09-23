@@ -27,6 +27,15 @@ namespace
         return std::regex_search(json, match, field)
             ? static_cast<unsigned int>(std::stoul(match[1].str())) : fallback;
     }
+
+    bool jsonBoolean(const std::string& json, const std::string& key, bool fallback)
+    {
+        const std::regex field("\\\"" + key + "\\\"\\s*:\\s*(true|false)");
+        std::smatch match;
+        if (!std::regex_search(json, match, field))
+            return fallback;
+        return match[1].str() == "true";
+    }
 }
 
 Entity::Entity(bool is2D, string entityName, float x, float y)
@@ -108,12 +117,15 @@ bool Entity::registerAnimation(const std::string& animationPath)
         const unsigned int frameCount = jsonNumber(object, "columns", 0);
         const std::regex reverseField("\"reverse\"\\s*:\\s*true");
         const bool reverse = std::regex_search(object, reverseField);
+        const bool loop = jsonBoolean(object, "loop", true);
+        const unsigned int frameDurationMs = jsonNumber(object, "frameDurationMs", 100);
         if (name.empty())
             continue;
 
         Animation configured;
         if (!configured.configureSpriteSheetRow(spriteSheet, columns,
-            rows, row, frameCount, 0.1f, true, reverse))
+            rows, row, frameCount, static_cast<float>(frameDurationMs) / 1000.0f,
+            loop, reverse))
             return false;
         registeredAnimations[name] = std::move(configured);
         registeredAny = true;
@@ -128,7 +140,11 @@ bool Entity::startAnimation(const std::string& animationName)
     if (found == registeredAnimations.end())
         return false;
 
+    if (activeAnimationName == animationName && animation.isPlaying())
+        return true;
+
     animation = found->second;
+    activeAnimationName = animationName;
     animation.start();
     return true;
 }

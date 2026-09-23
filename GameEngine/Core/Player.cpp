@@ -8,7 +8,10 @@ Player::Player(string entityName, string spriteName, double width, double height
     : Entity2D(entityName, spriteName, width, height, x, y, useCollision)
 {
     if (!animationPath.empty())
+    {
         registerAnimation(animationPath);
+        startAnimation("Idle_Front");
+    }
 
     if (x == 0.0f && y == 0.0f)
         setPosition(100.0f, getGroundY());
@@ -32,9 +35,29 @@ bool Player::isGrounded() const
 void Player::setGrounded(bool value)
 {
     grounded = value;
+}
 
-    if (grounded)
-        animation.stop();
+Player::Direction Player::getDirection() const
+{
+    return direction;
+}
+
+const char* Player::getDirectionName() const
+{
+    switch (direction)
+    {
+    case Direction::Back: return "Back";
+    case Direction::Left: return "Left";
+    case Direction::Front: return "Front";
+    case Direction::Right: return "Right";
+    }
+
+    return "Front";
+}
+
+void Player::setDirection(Direction value)
+{
+    direction = value;
 }
 
 void Player::addAbility(Ability ability, std::function<void(const Ability&)> callback)
@@ -81,7 +104,7 @@ void Player::update(float deltaTime, const std::vector<Entity2D*>& obstacles)
     }
 
     const sf::Vector2f previousPosition = position;
-    setGrounded(false);
+    grounded = false;
     setVelocity(velocity.x, velocity.y + gravity * deltaTime);
     Entity2D::update(deltaTime);
 

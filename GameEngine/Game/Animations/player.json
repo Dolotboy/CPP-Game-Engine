@@ -139,49 +139,59 @@
       "name": "Idle_Back",
       "row": 22,
       "columns": 2,
-      "reverse": false
+      "reverse": false,
+      "frameDurationMs": 400
     },
     {
       "name": "Idle_Left",
       "row": 23,
       "columns": 2,
-      "reverse": false
+      "reverse": false,
+      "frameDurationMs": 400
     },
     {
       "name": "Idle_Front",
       "row": 24,
       "columns": 2,
-      "reverse": false
+      "reverse": false,
+      "loop": true,
+      "frameDurationMs": 400
     },
     {
       "name": "Idle_Right",
       "row": 25,
       "columns": 2,
-      "reverse": false
+      "reverse": false,
+      "frameDurationMs": 400
     },
     {
       "name": "Jump_Back",
       "row": 26,
       "columns": 5,
-      "reverse": false
+      "reverse": false,
+      "frameDurationMs": 120
     },
     {
       "name": "Jump_Left",
       "row": 27,
       "columns": 5,
-      "reverse": false
+      "reverse": false,
+      "loop": true,
+      "frameDurationMs": 120
     },
     {
       "name": "Jump_Front",
       "row": 28,
       "columns": 5,
-      "reverse": false
+      "reverse": false,
+      "frameDurationMs": 120
     },
     {
       "name": "Jump_Right",
       "row": 29,
       "columns": 5,
-      "reverse": false
+      "reverse": false,
+      "frameDurationMs": 120
     },
     {
       "name": "Sit_Back",

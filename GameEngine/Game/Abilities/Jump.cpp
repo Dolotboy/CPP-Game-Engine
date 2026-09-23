@@ -13,6 +13,6 @@ void Jump::execute(Player& player)
     if (player.isGrounded())
     {
         player.setVelocity(player.velocity.x, jumpVelocity);
-        player.startAnimation("Jump_Left");
+        player.startAnimation(std::string("Jump_") + player.getDirectionName());
     }
 }
