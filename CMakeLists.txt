@@ -95,6 +95,19 @@ add_custom_command(TARGET GameEngine POST_BUILD
         "$<TARGET_FILE_DIR:GameEngine>/assets"
 )
 
+# Directory containing animation assets (copied to runtime)
+set(GAME_ANIMATIONS_DIR
+    "${CMAKE_CURRENT_SOURCE_DIR}/GameEngine/Game/Animations"
+    CACHE PATH "Directory containing the game's animation assets"
+)
+
+# Copy animations to a top-level "Animations" folder beside the executable
+add_custom_command(TARGET GameEngine POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${GAME_ANIMATIONS_DIR}"
+        "$<TARGET_FILE_DIR:GameEngine>/Animations"
+)
+
 # --------------------------------------------------
 # SFML DLLs - Windows
 # --------------------------------------------------
