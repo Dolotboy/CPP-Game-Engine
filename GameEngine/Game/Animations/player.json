@@ -1,0 +1,295 @@
+{
+  "spritePath": "assets/sprites/player_spritesheet.png",
+  "columns": 4,
+  "rows": 17,
+  "animations": [
+    {
+      "name": "Spellcast_Back",
+      "row": 0
+    },
+    {
+      "name": "Spellcast_Left",
+      "row": 1
+    },
+    {
+      "name": "Spellcast_Front",
+      "row": 2
+    },
+    {
+      "name": "Spellcast_Right",
+      "row": 3
+    },
+    {
+      "name": "Thrust_Back",
+      "row": 4
+    },
+    {
+      "name": "Thrust_Left",
+      "row": 5
+    },
+    {
+      "name": "Thrust_Front",
+      "row": 6
+    },
+    {
+      "name": "Thrust_Right",
+      "row": 7
+    },
+    {
+      "name": "Walk_Back",
+      "row": 8
+    },
+    {
+      "name": "Walk_Left",
+      "row": 9
+    },
+    {
+      "name": "Walk_Front",
+      "row": 10
+    },
+    {
+      "name": "Walk_Right",
+      "row": 11
+    },
+    {
+      "name": "Slash_Back",
+      "row": 12
+    },
+    {
+      "name": "Slash_Left",
+      "row": 13
+    },
+    {
+      "name": "Slash_Front",
+      "row": 14
+    },
+    {
+      "name": "Slash_Right",
+      "row": 15
+    },
+    {
+      "name": "Shoot_Back",
+      "row": 16
+    },
+    {
+      "name": "Shoot_Left",
+      "row": 17
+    },
+    {
+      "name": "Shoot_Front",
+      "row": 18
+    },
+    {
+      "name": "Shoot_Right",
+      "row": 19
+    },
+    {
+      "name": "Hurt_Back",
+      "row": 20
+    },
+    {
+      "name": "Hurt_Left",
+      "row": 21
+    },
+    {
+      "name": "Hurt_Front",
+      "row": 22
+    },
+    {
+      "name": "Hurt_Right",
+      "row": 23
+    },
+    {
+      "name": "Climb_Back",
+      "row": 24
+    },
+    {
+      "name": "Climb_Left",
+      "row": 25
+    },
+    {
+      "name": "Climb_Front",
+      "row": 26
+    },
+    {
+      "name": "Climb_Right",
+      "row": 27
+    },
+    {
+      "name": "Idle_Back",
+      "row": 28
+    },
+    {
+      "name": "Idle_Left",
+      "row": 29
+    },
+    {
+      "name": "Idle_Front",
+      "row": 30
+    },
+    {
+      "name": "Idle_Right",
+      "row": 31
+    },
+    {
+      "name": "Jump_Back",
+      "row": 32
+    },
+    {
+      "name": "Jump_Left",
+      "row": 33
+    },
+    {
+      "name": "Jump_Front",
+      "row": 34
+    },
+    {
+      "name": "Jump_Right",
+      "row": 35
+    },
+    {
+      "name": "Sit_Back",
+      "row": 36
+    },
+    {
+      "name": "Sit_Left",
+      "row": 37
+    },
+    {
+      "name": "Sit_Front",
+      "row": 38
+    },
+    {
+      "name": "Sit_Right",
+      "row": 39
+    },
+    {
+      "name": "Emote_Back",
+      "row": 40
+    },
+    {
+      "name": "Emote_Left",
+      "row": 41
+    },
+    {
+      "name": "Emote_Front",
+      "row": 42
+    },
+    {
+      "name": "Emote_Right",
+      "row": 43
+    },
+    {
+      "name": "Death_Back",
+      "row": 44
+    },
+    {
+      "name": "Death_Left",
+      "row": 45
+    },
+    {
+      "name": "Death_Front",
+      "row": 46
+    },
+    {
+      "name": "Death_Right",
+      "row": 47
+    },
+    {
+      "name": "Run_Back",
+      "row": 48
+    },
+    {
+      "name": "Run_Left",
+      "row": 49
+    },
+    {
+      "name": "Run_Front",
+      "row": 50
+    },
+    {
+      "name": "Run_Right",
+      "row": 51
+    },
+    {
+      "name": "Watering_Back",
+      "row": 52
+    },
+    {
+      "name": "Watering_Left",
+      "row": 53
+    },
+    {
+      "name": "Watering_Front",
+      "row": 54
+    },
+    {
+      "name": "Watering_Right",
+      "row": 55
+    },
+    {
+      "name": "Combat Idle_Back",
+      "row": 56
+    },
+    {
+      "name": "Combat Idle_Left",
+      "row": 57
+    },
+    {
+      "name": "Combat Idle_Front",
+      "row": 58
+    },
+    {
+      "name": "Combat Idle_Right",
+      "row": 59
+    },
+    {
+      "name": "1-Handed Slash_Back",
+      "row": 60
+    },
+    {
+      "name": "1-Handed Slash_Left",
+      "row": 61
+    },
+    {
+      "name": "1-Handed Slash_Front",
+      "row": 62
+    },
+    {
+      "name": "1-Handed Slash_Right",
+      "row": 63
+    },
+    {
+      "name": "1-Handed Backslash_Back",
+      "row": 64
+    },
+    {
+      "name": "1-Handed Backslash_Left",
+      "row": 65
+    },
+    {
+      "name": "1-Handed Backslash_Front",
+      "row": 66
+    },
+    {
+      "name": "1-Handed Backslash_Right",
+      "row": 67
+    },
+    {
+      "name": "1-Handed Halfslash_Back",
+      "row": 68
+    },
+    {
+      "name": "1-Handed Halfslash_Left",
+      "row": 69
+    },
+    {
+      "name": "1-Handed Halfslash_Front",
+      "row": 70
+    },
+    {
+      "name": "1-Handed Halfslash_Right",
+      "row": 71
+    }
+  ]
+}
