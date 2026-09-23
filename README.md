@@ -176,6 +176,103 @@ Vous devriez obtenir quelque chose comme:
 
 ## Core
 
+### Animation
+
+`Animation` gère la lecture d'une suite d'images ou d'une animation découpée
+dans une spritesheet. `Entity` possède une animation courante dans son membre
+`animation`; `Entity::update(deltaTime)` fait avancer cette animation. Une
+`Entity2D` applique ensuite la texture et le rectangle de la frame courante à
+son sprite, redimensionné à la taille de l'entité.
+
+#### Démarrer une animation directement
+
+Une animation peut être configurée et démarrée à partir d'une liste de fichiers
+image :
+
+```cpp
+entity.animation.start({
+    "assets/animations/jump_01.png",
+    "assets/animations/jump_02.png",
+    "assets/animations/jump_03.png"
+}, 0.12f, false); // durée d'une frame en secondes, sans boucle
+```
+
+Pour une spritesheet régulière, `columns` et `rows` indiquent le nombre de
+colonnes et de lignes de frames dans toute l'image :
+
+```cpp
+entity.animation.startSpriteSheet(
+    "assets/sprites/effect.png",
+    4, 2,       // 4 colonnes par 2 lignes
+    0.12f,      // durée d'une frame en secondes
+    true        // boucle
+);
+```
+
+`start(...)` configure puis démarre l'animation. `configure(...)` et
+`configureSpriteSheet(...)` permettent de préparer l'animation sans la lancer;
+`animation.start()` démarre alors à la première frame. Les contrôles disponibles
+sont `stop()` (arrête et revient à la première frame), `pause()` et `resume()`.
+`isConfigured()` et `isPlaying()` permettent de consulter son état.
+
+#### Enregistrer des animations dans une entité
+
+Pour définir plusieurs animations d'une même spritesheet, l'entité peut charger
+un fichier JSON avec `registerAnimation(path)`, puis en démarrer une par son nom
+avec `startAnimation(name)`. Ces fonctions renvoient `false` si le chargement ou
+la recherche du nom échoue.
+
+Un `Player` accepte le chemin du JSON comme dernier paramètre de son constructeur.
+À l'initialisation, il enregistre les définitions puis démarre `Idle_Front` :
+
+```cpp
+Player* player = EntityManager::addEntity<Player>(
+    "player",
+    "assets/sprites/player_spritesheet.png",
+    64.0, 64.0,
+    25.0f, groundY,
+    true,                       // collisions
+    "Animations/player.json"   // définitions d'animations
+);
+
+player->startAnimation("Jump_Left");
+```
+
+Le JSON contient le chemin de la spritesheet et ses dimensions en cases. Le
+chemin `spritePath` est résolu depuis le dossier parent du dossier contenant le
+JSON; avec `Animations/player.json`, le chemin ci-dessous pointe donc vers
+`assets/sprites/player_spritesheet.png` :
+
+```json
+{
+  "spritePath": "assets/sprites/player_spritesheet.png",
+  "columns": 13,
+  "rows": 54,
+  "animations": [
+    {
+      "name": "Idle_Front",
+      "row": 24,
+      "columns": 2,
+      "reverse": false,
+      "loop": true,
+      "frameDurationMs": 400
+    }
+  ]
+}
+```
+
+`columns` et `rows` à la racine décrivent la grille complète de la spritesheet.
+Dans chaque animation, `row` sélectionne la ligne, et `columns` donne le nombre
+de frames consécutives à lire depuis la première colonne. `reverse: true` lit
+ces frames dans l'ordre inverse. `loop` détermine si la lecture recommence après
+la dernière frame; `frameDurationMs` indique la durée de chaque frame en
+millisecondes. Ces deux derniers champs sont facultatifs : par défaut, l'animation
+boucle avec une durée de 100 ms par frame.
+
+Chaque animation enregistrée partage la texture de la spritesheet. Le choix de
+l'animation ne recharge donc pas le fichier image. Pour remplacer l'animation
+courante, il suffit d'appeler `startAnimation` avec un autre nom.
+
 ### EntityManager
 
 `EntityManager` est responsable du cycle de vie et du cycle de jeu des entités.
@@ -246,7 +343,8 @@ Entity2D(string entityName, string spriteName,
 Player(string entityName, string spriteName,
     double width = 32.0, double height = 32.0,
     float x = 0.0f, float y = 0.0f,
-    bool useCollision = true);
+    bool useCollision = true,
+    const std::string& animationPath = "");
 ```
 
 Pour une entité 2D, les deux derniers paramètres permettent donc de définir sa
