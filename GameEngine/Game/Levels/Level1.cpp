@@ -31,7 +31,7 @@ Level1::Level1(LevelManager::LevelType nextLevel)
     else
         std::cerr << "Unable to select frame 0 of the barrel Destroy animation\n";
 
-    EntityManager::addEntity<Portal>("portal", "assets/sprites/blue_portal.png", 48.0, 48.0, 300.0f, groundY, true, nextLevel);
+    EntityManager::addEntity<Portal>("portal", "assets/sprites/blue_portal.png", 48.0, 48.0, 300.0f, groundY, -1.0f, true, nextLevel);
 
     EntityManager::dontDestroyOnLoad(player);
     EntityManager::dontDestroyOnLoad(barrel);

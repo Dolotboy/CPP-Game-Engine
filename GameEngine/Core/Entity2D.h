@@ -27,11 +27,14 @@ public:
 
 	Entity2D(string entityName, string spriteName, double width, double height,
 		float x = 0.0f, float y = 0.0f, bool useCollision = false);
+	Entity2D(string entityName, string spriteName, double width, double height,
+		float x, float y, float z, bool useCollision = false);
 
 	bool usesCollision() const;
 	void setUseCollision(bool value);
 
 	void setPosition(float x, float y) override;
+	void setPosition(float x, float y, float z) override;
 	void setTexture(string textureName);
 	void setCollisionBox(float left, float top, float width, float height);
 	sf::FloatRect getCollisionBox() const;

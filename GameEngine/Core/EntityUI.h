@@ -18,7 +18,8 @@ class EntityUI : public Entity2D
 public:
     EntityUI(
         const std::string& entityName,
-        sf::Vector2f position = sf::Vector2f(0.0f, 0.0f));
+        sf::Vector2f position = sf::Vector2f(0.0f, 0.0f),
+        float z = 0.0f);
 
     void addText(
         const std::string& text,

@@ -16,8 +16,8 @@ void centerText(sf::Text& text, sf::Vector2f position, sf::Vector2f size)
 }
 }
 
-EntityUI::EntityUI(const std::string& entityName, sf::Vector2f position)
-    : Entity2D(entityName, "", 0.0, 0.0, position.x, position.y, false)
+EntityUI::EntityUI(const std::string& entityName, sf::Vector2f position, float z)
+    : Entity2D(entityName, "", 0.0, 0.0, position.x, position.y, z, false)
 {
 }
 

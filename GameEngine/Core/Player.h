@@ -20,6 +20,11 @@ public:
     Player(string entityName, string spriteName, double width = 32.0, double height = 32.0,
         float x = 0.0f, float y = 0.0f, bool useCollision = true,
         const std::string& animationPath = "");
+    Player(string entityName, string spriteName, double width, double height,
+        float x, float y, float z);
+    Player(string entityName, string spriteName, double width, double height,
+        float x, float y, float z, bool useCollision,
+        const std::string& animationPath);
 
     void update(float deltaTime) override;
     void update(float deltaTime, const std::vector<Entity2D*>& obstacles);

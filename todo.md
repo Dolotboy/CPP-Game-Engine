@@ -3,4 +3,4 @@
 3. [x] Créer un système box collider à part du sprite, par défaut quand pour l'entité useCollision=true, le box collider est de la taille du sprite, mais on peut override la taille et la position du box collider avec `setCollisionBox`.
 4. [x] Là, avec `player_automatic.json` j'utilise une spritesheet qui est de gauche à droite et chaque ligne est une animation, mais rien ne dit que ce sera toujours le cas, une animation pourrait être tenu sur plusieurs lignes, ça pourrait être vertical de haut en bas et ainsi de suite. Le système fonctionne, mais n'est pas universel
 5. Créer le système de gravité et permettre de définir une entité comme utilisant la gravité à la création de l'entité, de ce fait le fonctionnement du jump du player changerait.
-6. Ajouter aux entités la possibilité d'avoir une position z différente, de base elles auraient toutes une position 0, mais sauf si la position précisé dans le constructeur x,y,z ou en utilisant setPosition(x,y,z) (Disponible aussi avec setPosition(x,y) ou setZIndex(z))
+6. [x] Ajouter aux entités une position Z (0 par défaut), configurable dans le constructeur, avec `setPosition(x, y, z)` ou `setZIndex(z)`.

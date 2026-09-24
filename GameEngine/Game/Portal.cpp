@@ -13,7 +13,21 @@ Portal::Portal(const std::string& entityName,
     float y,
     bool useCollision,
     LevelManager::LevelType nextLevel)
-    : Entity2D(entityName, spriteName, width, height, x, y, useCollision),
+    : Portal(entityName, spriteName, width, height, x, y, 0.0f,
+        useCollision, nextLevel)
+{
+}
+
+Portal::Portal(const std::string& entityName,
+    const std::string& spriteName,
+    double width,
+    double height,
+    float x,
+    float y,
+    float z,
+    bool useCollision,
+    LevelManager::LevelType nextLevel)
+    : Entity2D(entityName, spriteName, width, height, x, y, z, useCollision),
             nextLevel(nextLevel)
 {
 }

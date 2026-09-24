@@ -5,7 +5,20 @@
 
 Player::Player(string entityName, string spriteName, double width, double height,
     float x, float y, bool useCollision, const std::string& animationPath)
-    : Entity2D(entityName, spriteName, width, height, x, y, useCollision)
+    : Player(entityName, spriteName, width, height, x, y, 0.0f,
+        useCollision, animationPath)
+{
+}
+
+Player::Player(string entityName, string spriteName, double width, double height,
+    float x, float y, float z)
+    : Player(entityName, spriteName, width, height, x, y, z, true, "")
+{
+}
+
+Player::Player(string entityName, string spriteName, double width, double height,
+    float x, float y, float z, bool useCollision, const std::string& animationPath)
+    : Entity2D(entityName, spriteName, width, height, x, y, z, useCollision)
 {
     if (!animationPath.empty())
     {

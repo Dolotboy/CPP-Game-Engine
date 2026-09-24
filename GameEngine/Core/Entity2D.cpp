@@ -4,7 +4,14 @@
 #include <iostream>
 
 Entity2D::Entity2D(string entityName, string spriteName, double width, double height,
-	float x, float y, bool useCollision) : Entity(true, entityName, x, y)
+	float x, float y, bool useCollision)
+	: Entity2D(entityName, spriteName, width, height, x, y, 0.0f, useCollision)
+{
+}
+
+Entity2D::Entity2D(string entityName, string spriteName, double width, double height,
+	float x, float y, float z, bool useCollision)
+	: Entity(true, entityName, x, y, z)
 {
 	this->spriteName = spriteName;
 	this->width = width;
@@ -41,6 +48,12 @@ void Entity2D::setUseCollision(bool value)
 void Entity2D::setPosition(float x, float y)
 {
 	Entity::setPosition(x, y);
+	this->sprite.setPosition(this->position);
+}
+
+void Entity2D::setPosition(float x, float y, float z)
+{
+	Entity::setPosition(x, y, z);
 	this->sprite.setPosition(this->position);
 }
 

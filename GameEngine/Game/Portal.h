@@ -16,6 +16,15 @@ public:
         float y = 0.0f,
         bool useCollision = true,
         LevelManager::LevelType nextLevel = typeid(void));
+    Portal(const std::string& entityName,
+        const std::string& spriteName,
+        double width,
+        double height,
+        float x,
+        float y,
+        float z,
+        bool useCollision = true,
+        LevelManager::LevelType nextLevel = typeid(void));
     void update(float deltaTime) override;
     void OnCollision(const CollisionInfo& collision) override;
     void OnCollisionEnter(const Entity2D& other) override;

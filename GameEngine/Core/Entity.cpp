@@ -116,20 +116,21 @@ namespace
     }
 }
 
-Entity::Entity(bool is2D, string entityName, float x, float y)
+Entity::Entity(bool is2D, string entityName, float x, float y, float z)
 {
 	this->is2D = is2D;
 	this->entityName = entityName;
 	this->entityId = EntityManager::generateEntityId();
 
 	this->position = sf::Vector2f(x, y);
+	this->zIndex = z;
 	this->velocity = sf::Vector2f(0.f, 0.f);
 
 	EntityManager::entities.push_back(this);
 }
 
-Entity::Entity(string entityName, float x, float y)
-	: Entity(true, entityName, x, y)
+Entity::Entity(string entityName, float x, float y, float z)
+	: Entity(true, entityName, x, y, z)
 {
 }
 
@@ -142,6 +143,22 @@ void Entity::update(float deltaTime)
 void Entity::setPosition(float x, float y)
 {
 	this->position = sf::Vector2f(x, y);
+}
+
+void Entity::setPosition(float x, float y, float z)
+{
+	setPosition(x, y);
+	setZIndex(z);
+}
+
+void Entity::setZIndex(float z)
+{
+	zIndex = z;
+}
+
+float Entity::getZIndex() const
+{
+	return zIndex;
 }
 
 void Entity::setVelocity(float x, float y)

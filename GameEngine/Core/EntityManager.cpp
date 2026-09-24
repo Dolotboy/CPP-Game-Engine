@@ -140,9 +140,22 @@ void EntityManager::removeDontDestroyOnLoad(Entity* entity)
 
 void EntityManager::renderAllEntities(sf::RenderTarget& target)
 {
-    for (const auto& entity : entities) {
-        entity->render(target);
-    }
+	std::vector<Entity*> renderOrder = entities;
+	std::stable_sort(renderOrder.begin(), renderOrder.end(),
+		[](const Entity* left, const Entity* right)
+		{
+			if (left == nullptr)
+				return false;
+			if (right == nullptr)
+				return true;
+			return left->getZIndex() < right->getZIndex();
+		});
+
+	for (Entity* entity : renderOrder)
+	{
+		if (entity != nullptr)
+			entity->render(target);
+	}
 }
 
 void EntityManager::updateAllEntities(float deltaTime)
@@ -197,6 +210,13 @@ void EntityManager::updateCollisions()
 
             if (firstBounds.intersects(secondBounds))
             {
+                if (first->getZIndex() != second->getZIndex())
+                {
+                    first->triggerOnCollision(*second);
+                    second->triggerOnCollision(*first);
+                    continue;
+                }
+
                 const sf::Vector2f firstPreviousPosition = previousPositions.count(first->entityId) != 0
                     ? previousPositions.at(first->entityId)
                     : first->position;

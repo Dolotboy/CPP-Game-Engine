@@ -393,14 +393,19 @@ Les constructeurs de base sont les suivants :
 
 ```cpp
 Entity(bool is2D, string entityName,
-    float x = 0.0f, float y = 0.0f);
+    float x = 0.0f, float y = 0.0f, float z = 0.0f);
 
 Entity(string entityName,
-    float x = 0.0f, float y = 0.0f);
+    float x = 0.0f, float y = 0.0f, float z = 0.0f);
 
 Entity2D(string entityName, string spriteName,
       double width = ..., double height = ...,
       float x = 0.0f, float y = 0.0f,
+      bool useCollision = false);
+
+Entity2D(string entityName, string spriteName,
+      double width, double height,
+      float x, float y, float z,
       bool useCollision = false);
 
 Player(string entityName, string spriteName,
@@ -408,10 +413,25 @@ Player(string entityName, string spriteName,
     float x = 0.0f, float y = 0.0f,
     bool useCollision = true,
     const std::string& animationPath = "");
+
+Player(string entityName, string spriteName,
+    double width, double height,
+    float x, float y, float z);
+
+Player(string entityName, string spriteName,
+    double width, double height,
+    float x, float y, float z,
+    bool useCollision, const std::string& animationPath);
 ```
 
 Pour une entité 2D, les deux derniers paramètres permettent donc de définir sa
 position initiale et d'activer ou non sa participation aux collisions.
+Les surcharges avec `z` acceptent la profondeur après `x` et `y`, avant
+`useCollision`; les anciennes signatures restent valides. Toutes les entités
+commencent avec `z = 0` si aucune profondeur n'est donnée. Au rendu,
+`EntityManager` dessine les petites valeurs d'abord et les grandes ensuite : une
+valeur Z plus élevée place donc l'entité visuellement devant. Les entités de
+même profondeur conservent leur ordre de création.
 
 #### Rechercher et supprimer une entité
 
@@ -488,8 +508,17 @@ entity->setPosition(220.0f, groundY);
 ```
 
 Cette fonction met à jour à la fois la position logique de l'entité et la
-position de son sprite. La position courante est accessible avec
-`entity->position`.
+position de son sprite, sans modifier sa profondeur Z. Pour définir les trois
+coordonnées en même temps, utilise `setPosition(x, y, z)`. Pour ne changer que
+la profondeur, utilise `setZIndex(z)` :
+
+```cpp
+entity->setPosition(220.0f, groundY, 2.0f);
+entity->setZIndex(3.0f);
+```
+
+La position X/Y est accessible via `entity->position`; la profondeur via
+`entity->getZIndex()`.
 
 La vitesse peut être modifiée avec :
 
@@ -542,6 +571,12 @@ La résolution est faite automatiquement par `EntityManager` lorsqu'une seule
 des deux entités en contact s'est déplacée pendant la frame. Le joueur reçoit
 également l'information `grounded`, ce qui lui permet de sauter depuis le sol ou
 depuis le dessus d'un obstacle sans configuration supplémentaire dans le niveau.
+
+Deux entités qui se chevauchent à des profondeurs Z différentes déclenchent
+quand même leurs événements `OnCollision`, mais ne sont pas physiquement
+résolues l'une contre l'autre. Elles peuvent ainsi se traverser tout en
+détectant leur chevauchement. La résolution physique s'applique aux entités qui
+ont le même Z.
 
 #### Boîte de collision
 
