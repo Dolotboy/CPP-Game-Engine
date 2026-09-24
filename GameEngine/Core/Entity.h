@@ -1,6 +1,7 @@
 #pragma once
 #include "Animation.h"
 #include <iostream>
+#include <optional>
 #include <string>
 #include <unordered_map>
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -24,6 +25,8 @@ public:
 	virtual void printInfo();
 	bool registerAnimation(const std::string& animationPath);
 	bool startAnimation(const std::string& animationName);
+	std::optional<AnimationSpriteFrame> getAnimationFrame(
+		const std::string& animationName, std::size_t frameIndex) const;
 
 	virtual void setPosition(float x, float y);
 	void setVelocity(float x, float y);

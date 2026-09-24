@@ -3,8 +3,10 @@
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/Texture.hpp>
 
+#include <cstddef>
 #include <string>
 #include <memory>
+#include <optional>
 #include <vector>
 
 struct AnimationFrame
@@ -12,6 +14,12 @@ struct AnimationFrame
     sf::IntRect textureRect;
     sf::Vector2f offset = sf::Vector2f(0.0f, 0.0f);
     sf::Vector2f canvasSize;
+};
+
+struct AnimationSpriteFrame
+{
+    std::shared_ptr<sf::Texture> texture;
+    AnimationFrame frame;
 };
 
 class Animation
@@ -54,6 +62,7 @@ public:
     const sf::Texture* getTexture() const;
     const sf::IntRect& getTextureRect() const;
     const AnimationFrame& getCurrentFrame() const;
+    std::optional<AnimationSpriteFrame> getFrameSprite(std::size_t frameIndex) const;
 
 private:
     std::vector<std::shared_ptr<sf::Texture>> textures;

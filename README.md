@@ -285,10 +285,10 @@ Chaque objet de `frames` décrit une image de l'animation :
 - `x`, `y` : coordonnées du coin supérieur gauche du rectangle dans la
   spritesheet, en pixels, depuis son coin supérieur gauche ;
 - `width`, `height` : largeur et hauteur du rectangle recadré, en pixels ;
-- `canvasWidth`, `canvasHeight` : dimensions du canevas logique commun, avant
-  redimensionnement à la taille de l'entité. Elles maintiennent une taille et un
-  alignement cohérents quand les rectangles recadrés ont des dimensions
-  différentes ;
+- `canvasWidth`, `canvasHeight` : dimensions du canevas logique de cette frame,
+  avant redimensionnement à la taille de l'entité. Utilise les mêmes valeurs
+  pour toutes les frames si tu veux conserver leur échelle relative. Si chaque
+  canevas a la taille du rectangle recadré, celui-ci remplit l'entité ;
 - `offsetX`, `offsetY` : position du coin supérieur gauche du rectangle recadré
   sur le canevas logique, en pixels. Le décalage peut différer d'une frame à
   l'autre pour garder le personnage aligné.
@@ -296,12 +296,15 @@ Chaque objet de `frames` décrit une image de l'animation :
 Les objets de la liste `frames` sont lus dans leur ordre d'apparition dans le
 JSON; cet ordre définit donc la séquence de lecture de l'animation.
 
-Les quatre champs de canevas et de décalage sont facultatifs. Sans eux, le moteur
+Les champs de canevas et de décalage sont facultatifs. Sans eux, le moteur
 utilise le rectangle recadré comme canevas entier, avec un décalage nul. Les
 valeurs doivent être cohérentes : les dimensions du canevas sont positives, les
 décalages sont positifs ou nuls, et le rectangle placé avec son décalage doit
-tenir dans le canevas. `loop` et `frameDurationMs` fonctionnent comme dans le
-format en grille. Une animation avec `loop: false` s'arrête sur sa dernière
+tenir dans le canevas. Le moteur adapte séparément l'échelle horizontale et
+verticale à la taille de l'entité. Un canevas de même taille que le rectangle
+recadré l'étire donc jusqu'à remplir l'entité; si leurs proportions diffèrent,
+l'image peut être déformée. `loop` et `frameDurationMs` fonctionnent comme dans
+le format en grille. Une animation avec `loop: false` s'arrête sur sa dernière
 frame et la garde affichée jusqu'à ce qu'une autre animation démarre.
 
 Lorsque les animations utilisent `frames`, `columns` et `rows` à la racine ne
@@ -312,6 +315,26 @@ orientation ou un découpage régulier.
 Chaque animation enregistrée partage la texture de la spritesheet. Le choix de
 l'animation ne recharge donc pas le fichier image. Pour remplacer l'animation
 courante, il suffit d'appeler `startAnimation` avec un autre nom.
+
+Une frame déjà enregistrée peut aussi servir de sprite par défaut, par exemple
+pour afficher le baril intact depuis la première frame de son animation de
+destruction :
+
+```cpp
+if (!barrel->registerAnimation("Animations/barrel.json"))
+    std::cerr << "Impossible de charger les animations du baril\n";
+
+if (!barrel->setSprite(barrel->getAnimationFrame("Destroy", 0)))
+    std::cerr << "Frame neutre du baril introuvable\n";
+```
+
+`getAnimationFrame(name, index)` renvoie une frame si le nom et l'indice
+existent. `setSprite` accepte ce résultat directement et renvoie `false` si la
+frame est absente. Le sprite par défaut conserve la texture, le rectangle, le
+canevas logique et les décalages de la frame. Il s'affiche lorsqu'aucune
+animation n'a démarré, ou quand l'animation est arrêtée explicitement. Une
+animation démarrée prend sa place; si elle se termine naturellement sans boucle,
+sa dernière frame reste affichée jusqu'au démarrage d'une autre animation.
 
 ### EntityManager
 

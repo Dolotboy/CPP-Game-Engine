@@ -1,0 +1,112 @@
+{
+  "spritePath": "assets/sprites/breakableBarrel01.png",
+  "animations": [
+    {
+      "name": "Destroy",
+      "loop": false,
+      "frameDurationMs": 100,
+      "frames": [
+        {
+          "x": 204,
+          "y": 36,
+          "width": 37,
+          "height": 44,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 37,
+          "canvasHeight": 44
+        },
+        {
+          "x": 170,
+          "y": 36,
+          "width": 34,
+          "height": 44,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 34,
+          "canvasHeight": 44
+        },
+        {
+          "x": 218,
+          "y": 84,
+          "width": 37,
+          "height": 44,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 37,
+          "canvasHeight": 44
+        },
+        {
+          "x": 170,
+          "y": 80,
+          "width": 48,
+          "height": 48,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 48,
+          "canvasHeight": 48
+        },
+        {
+          "x": 112,
+          "y": 22,
+          "width": 56,
+          "height": 50,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 56,
+          "canvasHeight": 50
+        },
+        {
+          "x": 113,
+          "y": 72,
+          "width": 57,
+          "height": 56,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 57,
+          "canvasHeight": 56
+        },
+        {
+          "x": 55,
+          "y": 68,
+          "width": 57,
+          "height": 60,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 57,
+          "canvasHeight": 60
+        },
+        {
+          "x": 1,
+          "y": 68,
+          "width": 54,
+          "height": 60,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 54,
+          "canvasHeight": 60
+        },
+        {
+          "x": 55,
+          "y": 8,
+          "width": 54,
+          "height": 60,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 54,
+          "canvasHeight": 60
+        },
+        {
+          "x": 1,
+          "y": 4,
+          "width": 54,
+          "height": 60,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 54,
+          "canvasHeight": 60
+        }
+      ]
+    }
+  ]
+}

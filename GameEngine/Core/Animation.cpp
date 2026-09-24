@@ -294,3 +294,14 @@ const AnimationFrame& Animation::getCurrentFrame() const
     static const AnimationFrame emptyFrame;
     return isConfigured() ? frames[currentFrame] : emptyFrame;
 }
+
+std::optional<AnimationSpriteFrame> Animation::getFrameSprite(
+    std::size_t frameIndex) const
+{
+    if (!isConfigured() || frameIndex >= frames.size())
+        return std::nullopt;
+
+    const std::shared_ptr<sf::Texture>& frameTexture =
+        textures.size() == frames.size() ? textures[frameIndex] : textures.front();
+    return AnimationSpriteFrame{ frameTexture, frames[frameIndex] };
+}

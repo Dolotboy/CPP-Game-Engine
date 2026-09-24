@@ -70,16 +70,22 @@ sf::FloatRect Entity2D::getCollisionBox() const
 	if (hasCustomCollisionBox)
 		return collisionBox;
 
+	const AnimationFrame* displayedFrame = nullptr;
 	if (animation.isPlaying() || animation.isFinished())
+		displayedFrame = &animation.getCurrentFrame();
+	else if (defaultAnimationSprite.has_value())
+		displayedFrame = &defaultAnimationSprite->frame;
+
+	if (displayedFrame != nullptr)
 	{
-		const AnimationFrame& frame = animation.getCurrentFrame();
-		if (frame.canvasSize.x > 0.0f && frame.canvasSize.y > 0.0f)
+		if (displayedFrame->canvasSize.x > 0.0f && displayedFrame->canvasSize.y > 0.0f)
 		{
-			const float scaleX = static_cast<float>(width) / frame.canvasSize.x;
-			const float scaleY = static_cast<float>(height) / frame.canvasSize.y;
-			return sf::FloatRect(frame.offset.x * scaleX, frame.offset.y * scaleY,
-				static_cast<float>(frame.textureRect.width) * scaleX,
-				static_cast<float>(frame.textureRect.height) * scaleY);
+			const float scaleX = static_cast<float>(width) / displayedFrame->canvasSize.x;
+			const float scaleY = static_cast<float>(height) / displayedFrame->canvasSize.y;
+			return sf::FloatRect(displayedFrame->offset.x * scaleX,
+				displayedFrame->offset.y * scaleY,
+				static_cast<float>(displayedFrame->textureRect.width) * scaleX,
+				static_cast<float>(displayedFrame->textureRect.height) * scaleY);
 		}
 	}
 
@@ -90,7 +96,34 @@ sf::FloatRect Entity2D::getCollisionBox() const
 
 void Entity2D::setSprite(const sf::Texture& texture)
 {
+	defaultAnimationSprite.reset();
 	this->sprite.setTexture(texture);
+}
+
+void Entity2D::setSprite(const AnimationSpriteFrame& frame)
+{
+	if (!frame.texture || frame.frame.canvasSize.x <= 0.0f ||
+		frame.frame.canvasSize.y <= 0.0f || frame.frame.textureRect.width <= 0 ||
+		frame.frame.textureRect.height <= 0)
+		return;
+
+	defaultAnimationSprite = frame;
+	this->sprite.setTexture(*frame.texture, true);
+	this->sprite.setTextureRect(frame.frame.textureRect);
+	const float scaleX = static_cast<float>(width) / frame.frame.canvasSize.x;
+	const float scaleY = static_cast<float>(height) / frame.frame.canvasSize.y;
+	this->sprite.setScale(scaleX, scaleY);
+	this->sprite.setPosition(position.x + frame.frame.offset.x * scaleX,
+		position.y + frame.frame.offset.y * scaleY);
+}
+
+bool Entity2D::setSprite(const std::optional<AnimationSpriteFrame>& frame)
+{
+	if (!frame.has_value())
+		return false;
+
+	setSprite(*frame);
+	return true;
 }
 
 sf::Vector2f Entity2D::getSize() const
@@ -161,27 +194,30 @@ void Entity2D::update(float deltaTime)
 {
 	Entity::update(deltaTime);
 	sf::Vector2f renderedPosition = this->position;
+	const AnimationFrame* displayedFrame = nullptr;
+	const sf::Texture* displayedTexture = nullptr;
 	if (animation.isPlaying() || animation.isFinished())
 	{
-		const sf::Texture* animationTexture = animation.getTexture();
-		if (animationTexture != nullptr)
-		{
-			this->sprite.setTexture(*animationTexture);
-			const sf::IntRect& textureRect = animation.getTextureRect();
-			const AnimationFrame& frame = animation.getCurrentFrame();
-			this->sprite.setTextureRect(textureRect);
-			if (frame.canvasSize.x > 0.0f && frame.canvasSize.y > 0.0f)
-			{
-				const float scaleX = static_cast<float>(width) / frame.canvasSize.x;
-				const float scaleY = static_cast<float>(height) / frame.canvasSize.y;
-				this->sprite.setScale(
-					scaleX, scaleY);
-				renderedPosition += sf::Vector2f(frame.offset.x * scaleX,
-					frame.offset.y * scaleY);
-			}
-		}
+		displayedFrame = &animation.getCurrentFrame();
+		displayedTexture = animation.getTexture();
 	}
-	else if (animation.isConfigured())
+	else if (defaultAnimationSprite.has_value())
+	{
+		displayedFrame = &defaultAnimationSprite->frame;
+		displayedTexture = defaultAnimationSprite->texture.get();
+	}
+
+	if (displayedFrame != nullptr && displayedTexture != nullptr)
+	{
+		this->sprite.setTexture(*displayedTexture);
+		this->sprite.setTextureRect(displayedFrame->textureRect);
+		const float scaleX = static_cast<float>(width) / displayedFrame->canvasSize.x;
+		const float scaleY = static_cast<float>(height) / displayedFrame->canvasSize.y;
+		this->sprite.setScale(scaleX, scaleY);
+		renderedPosition += sf::Vector2f(displayedFrame->offset.x * scaleX,
+			displayedFrame->offset.y * scaleY);
+	}
+	else if (animation.isConfigured() && !defaultAnimationSprite.has_value())
 	{
 		this->sprite.setTexture(this->texture, true);
 		const sf::FloatRect localBounds = this->sprite.getLocalBounds();

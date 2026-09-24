@@ -21,9 +21,16 @@ Level1::Level1(LevelManager::LevelType nextLevel)
 	//player->setCollisionBox(16.0f, 16.0f, 32.0f, 48.0f);
 
     Entity2D* barrel = EntityManager::addEntity<Entity2D>(
-        "barrel", "assets/sprites/barrel2.png",
+        "barrel", "assets/sprites/placeholder.png",
         64.0, 64.0, 150.0f, groundY,
         true); // useCollision
+    if (!barrel->registerAnimation("Animations/barrel.json"))
+        std::cerr << "Unable to register barrel animations from Animations/barrel.json\n";
+    else if (const auto neutralFrame = barrel->getAnimationFrame("Destroy", 0))
+        barrel->setSprite(*neutralFrame);
+    else
+        std::cerr << "Unable to select frame 0 of the barrel Destroy animation\n";
+
     EntityManager::addEntity<Portal>("portal", "assets/sprites/blue_portal.png", 48.0, 48.0, 300.0f, groundY, true, nextLevel);
 
     EntityManager::dontDestroyOnLoad(player);
@@ -85,10 +92,15 @@ void Level1::update(float)
 
     if (!barrelBreaking && *barrelTouchCount >= 3)
     {
-        barrelBreaking = true;
-        barrel->setUseCollision(false);
-        barrel->animation.start(
-            "assets/sprites/breakableBarrel01.png", 8, 4, 0.08f, false);
+        if (barrel->startAnimation("Destroy"))
+        {
+            barrelBreaking = true;
+            barrel->setUseCollision(false);
+        }
+        else
+        {
+            std::cerr << "Unable to start the barrel Destroy animation\n";
+        }
         *barrelTouchCount = 0;
     }
 

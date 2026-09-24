@@ -3,6 +3,7 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <functional>
+#include <optional>
 #include <unordered_set>
 
 class Entity2D;
@@ -36,6 +37,8 @@ public:
 	sf::FloatRect getCollisionBox() const;
 
 	void setSprite(const sf::Texture& texture);
+	void setSprite(const AnimationSpriteFrame& frame);
+	bool setSprite(const std::optional<AnimationSpriteFrame>& frame);
 	sf::Vector2f getSize() const;
 
 	virtual void OnCollision(const CollisionInfo& collision);
@@ -63,5 +66,6 @@ private:
 	sf::Sprite sprite;
 	CollisionHandler onCollision;
 	std::unordered_set<int> collidingEntities;
+	std::optional<AnimationSpriteFrame> defaultAnimationSprite;
 	bool useCollision = false;
 };

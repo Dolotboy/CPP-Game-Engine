@@ -261,6 +261,16 @@ bool Entity::startAnimation(const std::string& animationName)
     return true;
 }
 
+std::optional<AnimationSpriteFrame> Entity::getAnimationFrame(
+    const std::string& animationName, std::size_t frameIndex) const
+{
+    const auto found = registeredAnimations.find(animationName);
+    if (found == registeredAnimations.end())
+        return std::nullopt;
+
+    return found->second.getFrameSprite(frameIndex);
+}
+
 void Entity::render(sf::RenderTarget& target)
 {
 }
