@@ -9,6 +9,8 @@ Entity2D::Entity2D(string entityName, string spriteName, double width, double he
 	this->spriteName = spriteName;
 	this->width = width;
 	this->height = height;
+	this->collisionBox = sf::FloatRect(0.0f, 0.0f,
+		static_cast<float>(width), static_cast<float>(height));
 	this->useCollision = useCollision;
 
 
@@ -54,6 +56,38 @@ void Entity2D::setTexture(string textureName)
 	}
 }
 
+void Entity2D::setCollisionBox(float left, float top, float boxWidth, float boxHeight)
+{
+	if (boxWidth <= 0.0f || boxHeight <= 0.0f)
+		return;
+
+	collisionBox = sf::FloatRect(left, top, boxWidth, boxHeight);
+	hasCustomCollisionBox = true;
+}
+
+sf::FloatRect Entity2D::getCollisionBox() const
+{
+	if (hasCustomCollisionBox)
+		return collisionBox;
+
+	if (animation.isPlaying() || animation.isFinished())
+	{
+		const AnimationFrame& frame = animation.getCurrentFrame();
+		if (frame.canvasSize.x > 0.0f && frame.canvasSize.y > 0.0f)
+		{
+			const float scaleX = static_cast<float>(width) / frame.canvasSize.x;
+			const float scaleY = static_cast<float>(height) / frame.canvasSize.y;
+			return sf::FloatRect(frame.offset.x * scaleX, frame.offset.y * scaleY,
+				static_cast<float>(frame.textureRect.width) * scaleX,
+				static_cast<float>(frame.textureRect.height) * scaleY);
+		}
+	}
+
+	const sf::FloatRect spriteBounds = sprite.getGlobalBounds();
+	return sf::FloatRect(spriteBounds.left - position.x, spriteBounds.top - position.y,
+		spriteBounds.width, spriteBounds.height);
+}
+
 void Entity2D::setSprite(const sf::Texture& texture)
 {
 	this->sprite.setTexture(texture);
@@ -61,10 +95,6 @@ void Entity2D::setSprite(const sf::Texture& texture)
 
 sf::Vector2f Entity2D::getSize() const
 {
-	const sf::FloatRect bounds = sprite.getGlobalBounds();
-	if (bounds.width > 0.0f && bounds.height > 0.0f)
-		return sf::Vector2f(bounds.width, bounds.height);
-
 	return sf::Vector2f(static_cast<float>(width), static_cast<float>(height));
 }
 
@@ -130,19 +160,24 @@ void Entity2D::triggerOnCollisionExit(const Entity2D& other)
 void Entity2D::update(float deltaTime)
 {
 	Entity::update(deltaTime);
-	if (animation.isPlaying())
+	sf::Vector2f renderedPosition = this->position;
+	if (animation.isPlaying() || animation.isFinished())
 	{
 		const sf::Texture* animationTexture = animation.getTexture();
 		if (animationTexture != nullptr)
 		{
 			this->sprite.setTexture(*animationTexture);
 			const sf::IntRect& textureRect = animation.getTextureRect();
+			const AnimationFrame& frame = animation.getCurrentFrame();
 			this->sprite.setTextureRect(textureRect);
-			if (textureRect.width > 0 && textureRect.height > 0)
+			if (frame.canvasSize.x > 0.0f && frame.canvasSize.y > 0.0f)
 			{
+				const float scaleX = static_cast<float>(width) / frame.canvasSize.x;
+				const float scaleY = static_cast<float>(height) / frame.canvasSize.y;
 				this->sprite.setScale(
-					static_cast<float>(width) / static_cast<float>(textureRect.width),
-					static_cast<float>(height) / static_cast<float>(textureRect.height));
+					scaleX, scaleY);
+				renderedPosition += sf::Vector2f(frame.offset.x * scaleX,
+					frame.offset.y * scaleY);
 			}
 		}
 	}
@@ -157,7 +192,7 @@ void Entity2D::update(float deltaTime)
 				static_cast<float>(height) / localBounds.height);
 		}
 	}
-	this->sprite.setPosition(this->position);
+	this->sprite.setPosition(renderedPosition);
 }
 
 void Entity2D::render(sf::RenderTarget& target)

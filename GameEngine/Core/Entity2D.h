@@ -32,6 +32,8 @@ public:
 
 	void setPosition(float x, float y) override;
 	void setTexture(string textureName);
+	void setCollisionBox(float left, float top, float width, float height);
+	sf::FloatRect getCollisionBox() const;
 
 	void setSprite(const sf::Texture& texture);
 	sf::Vector2f getSize() const;
@@ -55,6 +57,8 @@ public:
 private:
 	string spriteName;
 	double width, height;
+	sf::FloatRect collisionBox;
+	bool hasCustomCollisionBox = false;
 	sf::Texture texture;
 	sf::Sprite sprite;
 	CollisionHandler onCollision;

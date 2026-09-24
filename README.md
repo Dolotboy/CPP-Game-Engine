@@ -14,22 +14,22 @@ Cette séparation permet d'avoir un moteur générique qui reste réutilisable, 
 ```text
 GameEngine/
 ├── Core/
-│   ├── EntityManager.cpp
-│   ├── EntityManager.h
-│   ├── Game.cpp
-│   ├── Game.h
-│   ├── Player.cpp
-│   ├── Player.h
-│   ├── Ability.cpp
-│   ├── Ability.h
+│   ├── Animation.*
+│   ├── Collider2D.*
+│   ├── Entity.*
+│   ├── Entity2D.*
+│   ├── EntityManager.*
+│   ├── Game.*
 │   └── ...
 ├── Game/
 │   ├── main.cpp
-│   ├── Jump.cpp
-│   ├── Jump.h
-│   ├── Attack.cpp
-│   ├── Attack.h
+│   ├── Abilities/
+│   ├── Animations/
+│   ├── Levels/
+│   ├── Portal.*
 │   └── assets/
+├── tools/
+│   └── spritesheet_editor.py
 └── ...
 ```
 
@@ -64,45 +64,26 @@ cmake --build build/linux --parallel
 ```
 L'executable se trouve ensuite dans `build/linux/bin/GameEngine`.
 
-#### GCC
-Depuis la racine du projet, compilez l'application dans `dist/` :
+
+### Assets et lancement
+
+La démo utilise des chemins relatifs tels que `assets/sprites/...` et
+`Animations/player_automatic.json`. CMake copie les dossiers `assets` et
+`Animations` à côté de l'exécutable. Lance le jeu depuis ce dossier afin que ces
+chemins relatifs soient résolus correctement :
 
 ```bash
-mkdir -p dist
-g++ -std=c++17 -Wall -Wextra -pedantic GameEngine/Core/*.cpp GameEngine/Game/*.cpp \
-	-o dist/game-engine \
-	$(pkg-config --cflags --libs sfml-graphics sfml-window sfml-system)
-mkdir -p dist/assets
-cp -R GameEngine/Game/assets/. dist/assets/
+cd build/linux/bin
+./GameEngine
 ```
 
-L'executable se trouve ensuite dans `dist/game-engine`.
-
-### Chemin des assets
-
-Le chemin du sprite est fourni directement au programme. Il peut pointer vers
-n'importe quel dossier du projet ou vers un chemin absolu :
-
-```bash
-./dist/game-engine GameEngine/Game/assets/player.png
-./dist/game-engine TheGame/assets/player.png
-./dist/game-engine /chemin/vers/MyGame/images/player.png
-```
-
-Si aucun chemin n'est fourni, CMake et la procédure GCC copient le dossier
-d'assets à côté de l'exécutable et la démo charge `assets/player.png`. Le
-lancement fonctionne donc depuis n'importe quel dossier :
-
-```bash
-./build/linux/bin/GameEngine
-```
-
-Pour utiliser un autre dossier d'assets avec CMake, définissez
-`GAME_ASSETS_DIR` lors de la configuration :
+Pour substituer les dossiers d'assets ou d'animations avec CMake, définis
+`GAME_ASSETS_DIR` et `GAME_ANIMATIONS_DIR` lors de la configuration :
 
 ```bash
 cmake -S . -B build/linux \
     -DGAME_ASSETS_DIR="$PWD/TheGame/assets" \
+    -DGAME_ANIMATIONS_DIR="$PWD/TheGame/Animations" \
     -DCMAKE_BUILD_TYPE=Release
 ```
 
@@ -182,7 +163,8 @@ Vous devriez obtenir quelque chose comme:
 dans une spritesheet. `Entity` possède une animation courante dans son membre
 `animation`; `Entity::update(deltaTime)` fait avancer cette animation. Une
 `Entity2D` applique ensuite la texture et le rectangle de la frame courante à
-son sprite, redimensionné à la taille de l'entité.
+son sprite. Pour les frames recadrées, le canevas logique est redimensionné à la
+taille de l'entité et les décalages gardent les frames alignées.
 
 #### Démarrer une animation directement
 
@@ -213,7 +195,10 @@ entity.animation.startSpriteSheet(
 `configureSpriteSheet(...)` permettent de préparer l'animation sans la lancer;
 `animation.start()` démarre alors à la première frame. Les contrôles disponibles
 sont `stop()` (arrête et revient à la première frame), `pause()` et `resume()`.
-`isConfigured()` et `isPlaying()` permettent de consulter son état.
+`isConfigured()`, `isPlaying()` et `isFinished()` permettent de consulter son
+état. Une animation non bouclée conserve sa dernière frame après sa fin; elle
+reste affichée jusqu'au démarrage d'une autre animation. `startAnimation` ne
+redémarre pas une animation de même nom si elle est déjà en cours ou terminée.
 
 #### Enregistrer des animations dans une entité
 
@@ -238,7 +223,7 @@ Player* player = EntityManager::addEntity<Player>(
 player->startAnimation("Jump_Left");
 ```
 
-Le JSON contient le chemin de la spritesheet et ses dimensions en cases. Le
+Le JSON contient le chemin de la spritesheet et les définitions d'animations. Le
 chemin `spritePath` est résolu depuis le dossier parent du dossier contenant le
 JSON; avec `Animations/player.json`, le chemin ci-dessous pointe donc vers
 `assets/sprites/player_spritesheet.png` :
@@ -261,13 +246,68 @@ JSON; avec `Animations/player.json`, le chemin ci-dessous pointe donc vers
 }
 ```
 
-`columns` et `rows` à la racine décrivent la grille complète de la spritesheet.
-Dans chaque animation, `row` sélectionne la ligne, et `columns` donne le nombre
-de frames consécutives à lire depuis la première colonne. `reverse: true` lit
-ces frames dans l'ordre inverse. `loop` détermine si la lecture recommence après
-la dernière frame; `frameDurationMs` indique la durée de chaque frame en
-millisecondes. Ces deux derniers champs sont facultatifs : par défaut, l'animation
-boucle avec une durée de 100 ms par frame.
+Dans ce format en grille, `columns` et `rows` à la racine décrivent le nombre de
+cases de la spritesheet. Dans chaque animation, `row` est l'indice de la ligne
+(à partir de zéro) et `columns` le nombre de frames consécutives à lire depuis la
+première colonne. `reverse: true` inverse leur ordre. `loop` indique si la
+lecture recommence après la dernière frame et `frameDurationMs` donne la durée
+d'une frame en millisecondes. Leurs valeurs par défaut sont respectivement
+`true` et `100`.
+
+Ce format en grille reste pratique pour les spritesheets régulières. Il n'est
+pas obligatoire : une animation peut définir ses rectangles de frame directement
+en pixels. La liste peut suivre n'importe quel ordre dans l'image, et ses frames
+peuvent venir de lignes ou de colonnes différentes :
+
+```json
+{
+  "spritePath": "assets/sprites/characters.png",
+  "animations": [
+    {
+      "name": "Attack",
+      "loop": false,
+      "frameDurationMs": 80,
+      "frames": [
+        { "x": 12, "y": 8, "width": 40, "height": 54,
+          "offsetX": 12, "offsetY": 10,
+          "canvasWidth": 64, "canvasHeight": 64 },
+        { "x": 80, "y": 4, "width": 52, "height": 60,
+          "offsetX": 6, "offsetY": 4,
+          "canvasWidth": 64, "canvasHeight": 64 }
+      ]
+    }
+  ]
+}
+```
+
+Chaque objet de `frames` décrit une image de l'animation :
+
+- `x`, `y` : coordonnées du coin supérieur gauche du rectangle dans la
+  spritesheet, en pixels, depuis son coin supérieur gauche ;
+- `width`, `height` : largeur et hauteur du rectangle recadré, en pixels ;
+- `canvasWidth`, `canvasHeight` : dimensions du canevas logique commun, avant
+  redimensionnement à la taille de l'entité. Elles maintiennent une taille et un
+  alignement cohérents quand les rectangles recadrés ont des dimensions
+  différentes ;
+- `offsetX`, `offsetY` : position du coin supérieur gauche du rectangle recadré
+  sur le canevas logique, en pixels. Le décalage peut différer d'une frame à
+  l'autre pour garder le personnage aligné.
+
+Les objets de la liste `frames` sont lus dans leur ordre d'apparition dans le
+JSON; cet ordre définit donc la séquence de lecture de l'animation.
+
+Les quatre champs de canevas et de décalage sont facultatifs. Sans eux, le moteur
+utilise le rectangle recadré comme canevas entier, avec un décalage nul. Les
+valeurs doivent être cohérentes : les dimensions du canevas sont positives, les
+décalages sont positifs ou nuls, et le rectangle placé avec son décalage doit
+tenir dans le canevas. `loop` et `frameDurationMs` fonctionnent comme dans le
+format en grille. Une animation avec `loop: false` s'arrête sur sa dernière
+frame et la garde affichée jusqu'à ce qu'une autre animation démarre.
+
+Lorsque les animations utilisent `frames`, `columns` et `rows` à la racine ne
+sont pas nécessaires. Le système accepte ainsi les frames placées à n'importe
+quel endroit de la texture, dans n'importe quel ordre, sans imposer une
+orientation ou un découpage régulier.
 
 Chaque animation enregistrée partage la texture de la spritesheet. Le choix de
 l'animation ne recharge donc pas le fichier image. Pour remplacer l'animation
@@ -412,8 +452,8 @@ entity->render(target);
 
 ### Entity2D
 
-`Entity2D` représente une entité visible avec une taille utilisée pour ses
-limites de collision.
+`Entity2D` représente une entité 2D visible. Sa taille définit celle du sprite;
+la boîte de collision par défaut suit le sprite ou la frame d'animation affichée.
 
 #### Position
 
@@ -451,7 +491,7 @@ ignorée par la détection et la résolution des collisions.
 
 Le système de collision 2D est géré par `EntityManager` et implémenté dans
 `Core/Collider2D`. Il utilise des boîtes englobantes rectangulaires (AABB)
-basées sur la position et la taille de chaque `Entity2D`.
+locales à chaque `Entity2D`, décalées par rapport à sa position dans le monde.
 
 À chaque frame, le moteur :
 
@@ -475,14 +515,33 @@ La méthode retourne un `CollisionResult` contenant :
 - `collided` : indique si une collision a été résolue ;
 - `grounded` : indique si l'entité mobile est posée sur le dessus de l'obstacle.
 
-La résolution est faite automatiquement par `EntityManager`. Le joueur reçoit
+La résolution est faite automatiquement par `EntityManager` lorsqu'une seule
+des deux entités en contact s'est déplacée pendant la frame. Le joueur reçoit
 également l'information `grounded`, ce qui lui permet de sauter depuis le sol ou
 depuis le dessus d'un obstacle sans configuration supplémentaire dans le niveau.
 
-Toute entité avec `useCollision = true` participe actuellement à la détection
-et à la résolution physique. Si elle doit seulement recevoir un événement sans
-bloquer le joueur, il faudra prévoir un réglage séparé de type trigger ; ce mode
-n'est pas encore exposé par l'API actuelle.
+#### Boîte de collision
+
+Le paramètre `useCollision` active la participation de l'entité à la détection
+des collisions. Il ne définit pas la taille de sa boîte. Sans boîte personnalisée,
+`Entity2D` utilise le rectangle du sprite. Pendant une animation découpée, il
+utilise le rectangle de texture courant replacé sur le canevas logique avec
+`offsetX`, `offsetY`, `canvasWidth` et `canvasHeight`; la boîte suit ainsi le
+frame recadré. Une animation non bouclée conserve sa dernière boîte de frame
+jusqu'au démarrage de l'animation suivante.
+
+Pour remplacer ce comportement par une boîte fixe, appelle `setCollisionBox`.
+Les valeurs sont exprimées en pixels locaux depuis le coin supérieur gauche de
+l'entité et priment sur le sprite et les frames d'animation :
+
+```cpp
+player->setCollisionBox(16.0f, 16.0f, 32.0f, 48.0f);
+```
+
+Sans cet appel, une entité créée avec `useCollision = true` utilise donc le
+sprite ou la frame recadrée comme boîte de collision. Les entités avec
+`useCollision = false` ne sont pas incluses dans les paires testées par
+`EntityManager`.
 
 ### Événements `OnCollision`
 
@@ -582,7 +641,7 @@ Les méthodes `OnCollision`, `OnCollisionEnter`, `OnCollisionStay` et
 `OnCollisionExit` sont appelées par le moteur. `setOnCollision` ajoute un
 callback fonctionnel pratique pour les cas simples.
 
-### Portail et changement de niveau
+### Exemple : Portail et changement de niveau
 
 `Portal` accepte le type C++ du niveau cible dans son constructeur. La syntaxe
 est volontairement courte, proche d'un `typeof` :
@@ -616,18 +675,20 @@ LevelManager::registerLevel(typeid(Level2),
     });
 ```
 
-Le portail demande ensuite simplement `typeid(Level2)`. La transition est
-exécutée à la fin de la frame afin de ne pas modifier la liste des entités
-pendant sa détection.
+Le portail demande ensuite simplement `typeid(Level2)`. Lorsqu'un joueur entre
+en contact avec lui, il s'arme; le changement de niveau est demandé quand le
+joueur appuie sur `E`. La transition est exécutée à la fin de la frame afin de ne
+pas modifier la liste des entités pendant sa détection.
 
 Exemple de liaison dans `main.cpp` :
 
 ```cpp
-currentState = std::make_unique<Level1>(playerSpritePath, typeid(Level2));
+currentState = std::make_unique<Level1>(typeid(Level2));
 ```
 
-Le portail ne déclenche la fabrique que pour l'état
-`CollisionInfo::State::Enter` et si `collision.other` est un `Player`.
+Le portail ne s'arme qu'à l'entrée en collision d'un `Player`; il se désarme à
+la sortie de collision. Il faut appuyer sur `E` pendant le contact pour changer
+de niveau.
 
 Lorsqu'un portail déclenche un changement de niveau, `LevelManager` conserve
 automatiquement toutes les entités enregistrées avec `dontDestroyOnLoad`. Le
@@ -661,3 +722,40 @@ puis réactivé lorsqu'une collision verticale descendante est détectée ou lor
 le joueur atteint le sol. La capacité de saut vérifie cet état avant d'appliquer
 une vitesse verticale négative : le joueur ne peut donc pas effectuer de saut
 en l'air, mais peut sauter depuis le sol ou depuis le dessus du barril.
+
+## Tools
+
+### Éditeur de spritesheet
+
+Le dépôt inclut un éditeur graphique Python pour créer et modifier les rectangles
+de frame des animations. Il n'utilise que la bibliothèque standard Python
+(Tkinter et `tk.PhotoImage`) :
+
+```powershell
+python tools/spritesheet_editor.py
+```
+
+Pour créer un JSON, ouvre une spritesheet, crée une animation, règle son nom, sa
+durée par frame et son option de boucle, puis dessine chaque rectangle de frame
+sur l'image. Renseigne aussi le canevas logique et les décalages de la frame,
+ajoute-la à l'animation, puis répète dans l'ordre de lecture souhaité. Le bouton
+**Exporter JSON…** enregistre le format explicite `animations[].frames` décrit
+dans [Core / Animation](#animation).
+
+Pour reprendre un travail existant, **Charger JSON…** ouvre d'abord le JSON, puis
+demande de choisir la spritesheet correspondante. Le JSON ne contient pas de
+chemin absolu vers l'image; le chemin choisi sert à l'éditeur. Le champ
+`spritePath` du JSON reste le chemin relatif utilisé par le jeu et peut être
+modifié dans la barre supérieure avant l'export.
+
+Dans la liste des frames, sélectionne une frame pour afficher son rectangle et
+ses valeurs de canevas/décalage. Tire le centre du rectangle pour le déplacer;
+tire un bord ou un coin pour le redimensionner. Ces gestes mettent directement
+à jour la frame sélectionnée. `Maj` + glisser commence une nouvelle sélection.
+Les boutons **Copier sélection** et **Coller sélection**, ou `Ctrl+C` et `Ctrl+V`,
+copient le rectangle avec ses dimensions et ses valeurs de canevas/décalage; le
+rectangle collé peut ensuite être déplacé vers la frame suivante.
+
+Le chargeur JSON de l'éditeur attend le format à rectangles explicites
+`animations[].frames`. Les JSON utilisant uniquement l'ancien format en grille
+(`row` et `columns` par animation) ne sont pas convertis automatiquement.

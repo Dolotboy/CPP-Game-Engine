@@ -1,0 +1,729 @@
+{
+  "spritePath": "assets/sprites/player_spritesheet.png",
+  "animations": [
+    {
+      "name": "Idle_Back",
+      "loop": true,
+      "frameDurationMs": 400,
+      "frames": [
+        {
+          "x": 15,
+          "y": 1423,
+          "width": 34,
+          "height": 47,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 79,
+          "y": 1423,
+          "width": 34,
+          "height": 47,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        }
+      ]
+    },
+    {
+      "name": "Idle_Left",
+      "loop": true,
+      "frameDurationMs": 400,
+      "frames": [
+        {
+          "x": 20,
+          "y": 1485,
+          "width": 25,
+          "height": 51,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 84,
+          "y": 1484,
+          "width": 25,
+          "height": 51,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        }
+      ]
+    },
+    {
+      "name": "Idle_Front",
+      "loop": true,
+      "frameDurationMs": 400,
+      "frames": [
+        {
+          "x": 15,
+          "y": 1549,
+          "width": 33,
+          "height": 51,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 79,
+          "y": 1549,
+          "width": 33,
+          "height": 51,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        }
+      ]
+    },
+    {
+      "name": "Idle_Right",
+      "loop": true,
+      "frameDurationMs": 400,
+      "frames": [
+        {
+          "x": 18,
+          "y": 1612,
+          "width": 26,
+          "height": 51,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 82,
+          "y": 1612,
+          "width": 26,
+          "height": 51,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        }
+      ]
+    },
+    {
+      "name": "Jump_Back",
+      "loop": false,
+      "frameDurationMs": 120,
+      "frames": [
+        {
+          "x": 15,
+          "y": 1678,
+          "width": 33,
+          "height": 48,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 79,
+          "y": 1679,
+          "width": 33,
+          "height": 48,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 145,
+          "y": 1675,
+          "width": 31,
+          "height": 52,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 209,
+          "y": 1672,
+          "width": 31,
+          "height": 48,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 266,
+          "y": 1676,
+          "width": 45,
+          "height": 49,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        }
+      ]
+    },
+    {
+      "name": "Jump_Left",
+      "loop": false,
+      "frameDurationMs": 120,
+      "frames": [
+        {
+          "x": 20,
+          "y": 1740,
+          "width": 26,
+          "height": 52,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 81,
+          "y": 1743,
+          "width": 28,
+          "height": 48,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 146,
+          "y": 1740,
+          "width": 30,
+          "height": 50,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 212,
+          "y": 1738,
+          "width": 31,
+          "height": 51,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 276,
+          "y": 1742,
+          "width": 35,
+          "height": 49,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        }
+      ]
+    },
+    {
+      "name": "Jump_Front",
+      "loop": false,
+      "frameDurationMs": 120,
+      "frames": [
+        {
+          "x": 15,
+          "y": 1804,
+          "width": 34,
+          "height": 52,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 80,
+          "y": 1807,
+          "width": 33,
+          "height": 49,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 145,
+          "y": 1805,
+          "width": 30,
+          "height": 48,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 206,
+          "y": 1802,
+          "width": 32,
+          "height": 48,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 265,
+          "y": 1804,
+          "width": 47,
+          "height": 48,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        }
+      ]
+    },
+    {
+      "name": "Jump_Right",
+      "loop": false,
+      "frameDurationMs": 120,
+      "frames": [
+        {
+          "x": 20,
+          "y": 1868,
+          "width": 25,
+          "height": 52,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 82,
+          "y": 1872,
+          "width": 30,
+          "height": 48,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 144,
+          "y": 1868,
+          "width": 30,
+          "height": 50,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 206,
+          "y": 1866,
+          "width": 31,
+          "height": 52,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 266,
+          "y": 1869,
+          "width": 35,
+          "height": 50,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        }
+      ]
+    },
+    {
+      "name": "Walk_Back",
+      "loop": true,
+      "frameDurationMs": 100,
+      "frames": [
+        {
+          "x": 15,
+          "y": 526,
+          "width": 34,
+          "height": 47,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 79,
+          "y": 525,
+          "width": 34,
+          "height": 49,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 144,
+          "y": 526,
+          "width": 32,
+          "height": 49,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 208,
+          "y": 526,
+          "width": 32,
+          "height": 49,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 271,
+          "y": 525,
+          "width": 33,
+          "height": 50,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 335,
+          "y": 525,
+          "width": 33,
+          "height": 48,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 400,
+          "y": 525,
+          "width": 33,
+          "height": 50,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 464,
+          "y": 526,
+          "width": 33,
+          "height": 49,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 528,
+          "y": 525,
+          "width": 33,
+          "height": 49,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        }
+      ]
+    },
+    {
+      "name": "Walk_Left",
+      "loop": true,
+      "frameDurationMs": 100,
+      "frames": [
+        {
+          "x": 20,
+          "y": 588,
+          "width": 26,
+          "height": 51,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 81,
+          "y": 589,
+          "width": 29,
+          "height": 50,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 147,
+          "y": 589,
+          "width": 27,
+          "height": 49,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 213,
+          "y": 588,
+          "width": 25,
+          "height": 50,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 277,
+          "y": 589,
+          "width": 26,
+          "height": 49,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 340,
+          "y": 590,
+          "width": 29,
+          "height": 49,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 405,
+          "y": 589,
+          "width": 27,
+          "height": 50,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 469,
+          "y": 589,
+          "width": 25,
+          "height": 49,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 532,
+          "y": 589,
+          "width": 26,
+          "height": 49,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        }
+      ]
+    },
+    {
+      "name": "Walk_Front",
+      "loop": true,
+      "frameDurationMs": 100,
+      "frames": [
+        {
+          "x": 16,
+          "y": 653,
+          "width": 32,
+          "height": 52,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 79,
+          "y": 653,
+          "width": 34,
+          "height": 51,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 143,
+          "y": 653,
+          "width": 33,
+          "height": 51,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 209,
+          "y": 654,
+          "width": 30,
+          "height": 50,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 272,
+          "y": 652,
+          "width": 32,
+          "height": 53,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 336,
+          "y": 653,
+          "width": 32,
+          "height": 52,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 400,
+          "y": 653,
+          "width": 32,
+          "height": 51,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 464,
+          "y": 654,
+          "width": 32,
+          "height": 50,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 527,
+          "y": 653,
+          "width": 33,
+          "height": 52,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        }
+      ]
+    },
+    {
+      "name": "Walk_Right",
+      "loop": true,
+      "frameDurationMs": 100,
+      "frames": [
+        {
+          "x": 19,
+          "y": 717,
+          "width": 25,
+          "height": 51,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 82,
+          "y": 718,
+          "width": 28,
+          "height": 49,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 147,
+          "y": 717,
+          "width": 25,
+          "height": 49,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 210,
+          "y": 717,
+          "width": 27,
+          "height": 48,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 274,
+          "y": 717,
+          "width": 27,
+          "height": 49,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 336,
+          "y": 718,
+          "width": 28,
+          "height": 49,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 401,
+          "y": 717,
+          "width": 28,
+          "height": 50,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 465,
+          "y": 717,
+          "width": 28,
+          "height": 50,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        },
+        {
+          "x": 531,
+          "y": 716,
+          "width": 26,
+          "height": 51,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 64,
+          "canvasHeight": 64
+        }
+      ]
+    }
+  ]
+}

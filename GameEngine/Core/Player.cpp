@@ -24,7 +24,9 @@ float Player::getGroundY() const
     if (Game::window == nullptr)
         return 0.0f;
 
-    return static_cast<float>(Game::window->getSize().y) - getSize().y;
+    const sf::FloatRect collisionBox = getCollisionBox();
+    return static_cast<float>(Game::window->getSize().y) -
+        collisionBox.top - collisionBox.height;
 }
 
 bool Player::isGrounded() const

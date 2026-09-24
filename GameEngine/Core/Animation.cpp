@@ -26,13 +26,14 @@ bool Animation::configure(const std::vector<std::string>& framePaths,
     }
 
     textures = std::move(loadedTextures);
-    textureRects.clear();
-    textureRects.reserve(textures.size());
+    frames.clear();
+    frames.reserve(textures.size());
     for (const std::shared_ptr<sf::Texture>& texture : textures)
     {
         const sf::Vector2u size = texture->getSize();
-        textureRects.emplace_back(0, 0,
-            static_cast<int>(size.x), static_cast<int>(size.y));
+        frames.push_back({ sf::IntRect(0, 0, static_cast<int>(size.x),
+            static_cast<int>(size.y)), sf::Vector2f(0.0f, 0.0f),
+            sf::Vector2f(static_cast<float>(size.x), static_cast<float>(size.y)) });
     }
 
     frameDuration = newFrameDuration;
@@ -40,6 +41,7 @@ bool Animation::configure(const std::vector<std::string>& framePaths,
     currentFrame = 0;
     elapsedTime = 0.0f;
     playing = false;
+    finished = false;
     return true;
 }
 
@@ -65,17 +67,19 @@ bool Animation::configureSpriteSheet(const std::string& spriteSheetPath,
 
     textures.clear();
     textures.push_back(std::make_shared<sf::Texture>(std::move(texture)));
-    textureRects.clear();
-    textureRects.reserve(static_cast<std::size_t>(columns) * rows);
+    frames.clear();
+    frames.reserve(static_cast<std::size_t>(columns) * rows);
     for (unsigned int row = 0; row < rows; ++row)
     {
         for (unsigned int column = 0; column < columns; ++column)
         {
-            textureRects.emplace_back(
+            frames.push_back({ sf::IntRect(
                 static_cast<int>(column * frameWidth),
                 static_cast<int>(row * frameHeight),
                 static_cast<int>(frameWidth),
-                static_cast<int>(frameHeight));
+                static_cast<int>(frameHeight)), sf::Vector2f(0.0f, 0.0f),
+                sf::Vector2f(static_cast<float>(frameWidth),
+                    static_cast<float>(frameHeight)) });
         }
     }
 
@@ -84,6 +88,7 @@ bool Animation::configureSpriteSheet(const std::string& spriteSheetPath,
     currentFrame = 0;
     elapsedTime = 0.0f;
     playing = false;
+    finished = false;
     return true;
 }
 
@@ -120,23 +125,52 @@ bool Animation::configureSpriteSheetRow(const std::shared_ptr<sf::Texture>& spri
     if (frameWidth == 0 || frameHeight == 0)
         return false;
 
-    textures.clear();
-    textures.push_back(spriteSheet);
-    textureRects.clear();
-    textureRects.reserve(frameCount);
+    std::vector<AnimationFrame> rowFrames;
+    rowFrames.reserve(frameCount);
     for (unsigned int frame = 0; frame < frameCount; ++frame)
     {
         const unsigned int column = reverse ? frameCount - 1 - frame : frame;
-        textureRects.emplace_back(static_cast<int>(column * frameWidth),
+        rowFrames.push_back({ sf::IntRect(static_cast<int>(column * frameWidth),
             static_cast<int>(row * frameHeight), static_cast<int>(frameWidth),
-            static_cast<int>(frameHeight));
+            static_cast<int>(frameHeight)), sf::Vector2f(0.0f, 0.0f),
+            sf::Vector2f(static_cast<float>(frameWidth),
+                static_cast<float>(frameHeight)) });
     }
 
+    return configureSpriteSheetFrames(spriteSheet, rowFrames, newFrameDuration, newLoop);
+}
+
+bool Animation::configureSpriteSheetFrames(
+    const std::shared_ptr<sf::Texture>& spriteSheet,
+    const std::vector<AnimationFrame>& frameData,
+    float newFrameDuration, bool newLoop)
+{
+    if (!spriteSheet || frameData.empty() || newFrameDuration <= 0.0f)
+        return false;
+
+    const sf::Vector2u textureSize = spriteSheet->getSize();
+    for (const AnimationFrame& frame : frameData)
+    {
+        const sf::IntRect& rect = frame.textureRect;
+        if (rect.left < 0 || rect.top < 0 || rect.width <= 0 || rect.height <= 0 ||
+            rect.left + rect.width > static_cast<int>(textureSize.x) ||
+            rect.top + rect.height > static_cast<int>(textureSize.y) ||
+            frame.canvasSize.x <= 0.0f || frame.canvasSize.y <= 0.0f ||
+            frame.offset.x < 0.0f || frame.offset.y < 0.0f ||
+            frame.offset.x + static_cast<float>(rect.width) > frame.canvasSize.x ||
+            frame.offset.y + static_cast<float>(rect.height) > frame.canvasSize.y)
+            return false;
+    }
+
+    textures.clear();
+    textures.push_back(spriteSheet);
+    frames = frameData;
     frameDuration = newFrameDuration;
     loop = newLoop;
     currentFrame = 0;
     elapsedTime = 0.0f;
     playing = false;
+    finished = false;
     return true;
 }
 
@@ -148,6 +182,7 @@ void Animation::start()
     currentFrame = 0;
     elapsedTime = 0.0f;
     playing = true;
+    finished = false;
 }
 
 bool Animation::start(const std::vector<std::string>& framePaths,
@@ -184,6 +219,7 @@ void Animation::stop()
     playing = false;
     elapsedTime = 0.0f;
     currentFrame = 0;
+    finished = false;
 }
 
 void Animation::pause()
@@ -208,12 +244,13 @@ void Animation::update(float deltaTime)
         elapsedTime -= frameDuration;
         ++currentFrame;
 
-        if (currentFrame >= textureRects.size())
+        if (currentFrame >= frames.size())
         {
             if (!loop)
             {
-                currentFrame = textureRects.size() - 1;
+                currentFrame = frames.size() - 1;
                 playing = false;
+                finished = true;
                 elapsedTime = 0.0f;
                 return;
             }
@@ -225,7 +262,7 @@ void Animation::update(float deltaTime)
 
 bool Animation::isConfigured() const
 {
-    return !textures.empty() && !textureRects.empty();
+    return !textures.empty() && !frames.empty();
 }
 
 bool Animation::isPlaying() const
@@ -233,13 +270,27 @@ bool Animation::isPlaying() const
     return playing;
 }
 
+bool Animation::isFinished() const
+{
+    return finished;
+}
+
 const sf::Texture* Animation::getTexture() const
 {
-    return isConfigured() ? textures.front().get() : nullptr;
+	if (!isConfigured())
+		return nullptr;
+	return textures.size() == frames.size()
+		? textures[currentFrame].get() : textures.front().get();
 }
 
 const sf::IntRect& Animation::getTextureRect() const
 {
     static const sf::IntRect emptyRect;
-    return isConfigured() ? textureRects[currentFrame] : emptyRect;
+    return isConfigured() ? frames[currentFrame].textureRect : emptyRect;
+}
+
+const AnimationFrame& Animation::getCurrentFrame() const
+{
+    static const AnimationFrame emptyFrame;
+    return isConfigured() ? frames[currentFrame] : emptyFrame;
 }

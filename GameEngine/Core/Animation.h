@@ -7,6 +7,13 @@
 #include <memory>
 #include <vector>
 
+struct AnimationFrame
+{
+    sf::IntRect textureRect;
+    sf::Vector2f offset = sf::Vector2f(0.0f, 0.0f);
+    sf::Vector2f canvasSize;
+};
+
 class Animation
 {
 public:
@@ -23,6 +30,9 @@ public:
         unsigned int columns, unsigned int rows, unsigned int row,
         unsigned int frameCount, float frameDuration = 0.1f,
         bool loop = true, bool reverse = false);
+    bool configureSpriteSheetFrames(const std::shared_ptr<sf::Texture>& spriteSheet,
+        const std::vector<AnimationFrame>& frameData,
+        float frameDuration = 0.1f, bool loop = true);
 
     void start();
     bool start(const std::vector<std::string>& framePaths,
@@ -40,15 +50,18 @@ public:
 
     bool isConfigured() const;
     bool isPlaying() const;
+    bool isFinished() const;
     const sf::Texture* getTexture() const;
     const sf::IntRect& getTextureRect() const;
+    const AnimationFrame& getCurrentFrame() const;
 
 private:
     std::vector<std::shared_ptr<sf::Texture>> textures;
-    std::vector<sf::IntRect> textureRects;
+    std::vector<AnimationFrame> frames;
     float frameDuration = 0.1f;
     float elapsedTime = 0.0f;
     std::size_t currentFrame = 0;
     bool loop = true;
     bool playing = false;
+    bool finished = false;
 };

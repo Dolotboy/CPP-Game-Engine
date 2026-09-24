@@ -188,10 +188,12 @@ void EntityManager::updateCollisions()
             if (first == nullptr || second == nullptr)
                 continue;
 
-            const sf::FloatRect firstBounds(first->position.x, first->position.y,
-                first->getSize().x, first->getSize().y);
-            const sf::FloatRect secondBounds(second->position.x, second->position.y,
-                second->getSize().x, second->getSize().y);
+			const sf::FloatRect firstBox = first->getCollisionBox();
+			const sf::FloatRect secondBox = second->getCollisionBox();
+			const sf::FloatRect firstBounds(first->position.x + firstBox.left,
+				first->position.y + firstBox.top, firstBox.width, firstBox.height);
+			const sf::FloatRect secondBounds(second->position.x + secondBox.left,
+				second->position.y + secondBox.top, secondBox.width, secondBox.height);
 
             if (firstBounds.intersects(secondBounds))
             {
