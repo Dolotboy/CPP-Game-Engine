@@ -2,6 +2,7 @@
 #include "../Core/LevelManager.h"
 #include "Levels/Level1.h"
 #include "Levels/Level2.h"
+#include "Levels/Level3.h"
 #include "Levels/MainMenu.h"
 
 #include <SFML/Graphics.hpp>
@@ -31,6 +32,11 @@ int main(int argc, char* argv[])
         [&](const std::vector<Entity*>&)
         {
             currentState = std::make_unique<Level2>();
+        });
+    LevelManager::registerLevel(typeid(Level3),
+        [&](const std::vector<Entity*>&)
+        {
+            currentState = std::make_unique<Level3>();
         });
 
     sf::Clock clock;
