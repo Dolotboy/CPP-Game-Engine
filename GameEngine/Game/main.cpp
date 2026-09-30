@@ -21,6 +21,12 @@ int main(int argc, char* argv[])
     bool playRequested = false;
     std::unique_ptr<GameState> currentState = std::make_unique<MainMenu>([&playRequested]() { playRequested = true; });
 
+    LevelManager::registerLevel(typeid(Level1),
+        [&](const std::vector<Entity*>&)
+        {
+            currentState = std::make_unique<Level1>(typeid(Level2));
+        });
+
     LevelManager::registerLevel(typeid(Level2),
         [&](const std::vector<Entity*>&)
         {

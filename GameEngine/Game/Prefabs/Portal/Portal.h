@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Core/LevelManager.h"
-#include "../Core/UIBuilder.h"
+#include "Core/LevelManager.h"
+#include "Core/UIBuilder.h"
 
 #include <string>
 

@@ -4,7 +4,7 @@
 #include "../Abilities/Attack.h"
 #include "../Abilities/Jump.h"
 #include "../Abilities/Move.h"
-#include "../Portal.h"
+#include "../Prefabs/Portal/Portal.h"
 
 #include <iostream>
 
@@ -12,11 +12,52 @@ Level1::Level1(LevelManager::LevelType nextLevel)
 {
     const float groundY = static_cast<float>(Game::window->getSize().y) - 64.0f;
 
-    Player* player = EntityManager::addEntity<Player>(
-        "player", "assets/sprites/player_spritesheet.png",
-        64.0, 64.0, 25.0f, groundY,
-        true, // useCollision
-        "Animations/player_manual.json");
+    Player* player = nullptr;
+    for (Entity* entity : EntityManager::entities) // Find existing player entity to avoid duplicate
+    {
+        player = dynamic_cast<Player*>(entity); 
+        if (player != nullptr)
+            break;
+    }
+
+    if (player == nullptr)
+    {
+        player = EntityManager::addEntity<Player>(
+            "player", "assets/sprites/player_spritesheet.png",
+            64.0, 64.0, 25.0f, groundY,
+            true, // useCollision
+            "Animations/player_manual.json");
+        EntityManager::dontDestroyOnLoad(player);
+
+        player->addAbility(
+            Ability("attack", "Attack", AbilityControl::mouse(sf::Mouse::Button::Left),
+                []() { Attack::execute(); }),
+            [](const Ability& ability) { std::cout << "Added: " << ability.getSlug() << "\n"; });
+
+        player->addAbility(
+            Ability("special", "Special",
+                AbilityControl::keyboard({ sf::Keyboard::LShift, sf::Keyboard::W })));
+
+        player->addAbility(
+            Ability("jump", "Jump",
+                AbilityControl::keyboardAny({ sf::Keyboard::Space, sf::Keyboard::W,
+                    sf::Keyboard::Up }),
+            [player]()
+            {
+                Jump::execute(*player);
+            }));
+
+        player->addAbility(
+            Ability("move", "Move", AbilityControl::always(),
+                [player]()
+                {
+                    Move::execute(*player);
+                }, true));
+    }
+    else
+    {
+        player->setPosition(25.0f, groundY);
+    }
 
 	//player->setCollisionBox(16.0f, 16.0f, 32.0f, 48.0f);
 
@@ -54,30 +95,6 @@ Level1::Level1(LevelManager::LevelType nextLevel)
             std::cout << "Barrel collides with Player" << std::endl;
     });
 
-    player->addAbility(
-        Ability("attack", "Attack", AbilityControl::mouse(sf::Mouse::Button::Left),
-            []() { Attack::execute(); }),
-        [](const Ability& ability) { std::cout << "Added: " << ability.getSlug() << "\n"; });
-
-    player->addAbility(
-        Ability("special", "Special",
-            AbilityControl::keyboard({ sf::Keyboard::LShift, sf::Keyboard::W })));
-
-    player->addAbility(
-            Ability("jump", "Jump",
-                AbilityControl::keyboardAny({ sf::Keyboard::Space, sf::Keyboard::W,
-                    sf::Keyboard::Up }),
-            [player]()
-            {
-                Jump::execute(*player);
-            }));
-
-    player->addAbility(
-        Ability("move", "Move", AbilityControl::always(),
-            [player]()
-            {
-                Move::execute(*player);
-            }, true));
 }
 
 void Level1::handleEvent(const sf::Event&)
