@@ -134,6 +134,11 @@ Entity::Entity(string entityName, float x, float y, float z)
 {
 }
 
+const std::string& Entity::getName() const
+{
+	return entityName;
+}
+
 void Entity::update(float deltaTime)
 {
 	this->position += this->velocity * deltaTime;

@@ -25,6 +25,7 @@ public:
 	virtual void update(float deltaTime);
 	virtual void render(sf::RenderTarget& target);
 	virtual void printInfo();
+	const std::string& getName() const;
 	bool registerAnimation(const std::string& animationPath);
 	bool startAnimation(const std::string& animationName);
 	std::optional<AnimationSpriteFrame> getAnimationFrame(

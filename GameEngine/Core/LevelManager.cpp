@@ -10,9 +10,7 @@ namespace
     std::unordered_map<LevelManager::LevelType, LevelManager::LevelFactory> levelFactories;
 }
 
-void LevelManager::changeLevel(
-    const LevelFactory& instantiateLevel,
-    const std::vector<Entity*>& entitiesToKeep)
+void LevelManager::changeLevel(const LevelFactory& instantiateLevel, const std::vector<Entity*>& entitiesToKeep)
 {
     std::vector<Entity*> entitiesToPreserve = EntityManager::getDontDestroyOnLoadEntities();
     entitiesToPreserve.insert(entitiesToPreserve.end(), entitiesToKeep.begin(), entitiesToKeep.end());
@@ -24,13 +22,12 @@ void LevelManager::changeLevel(
     }
 }
 
-void LevelManager::requestChangeLevel(
-    const LevelFactory& instantiateLevel,
-    const std::vector<Entity*>& entitiesToKeep)
+void LevelManager::requestChangeLevel(const LevelFactory& instantiateLevel, const std::vector<Entity*>& entitiesToKeep)
 {
     pendingLevelType = typeid(void);
     pendingLevelFactory = instantiateLevel;
     pendingEntitiesToKeep = entitiesToKeep;
+    std::cout << "Level change request received for factory" << std::endl;
 }
 
 void LevelManager::registerLevel(LevelType levelType, const LevelFactory& factory)
@@ -38,12 +35,11 @@ void LevelManager::registerLevel(LevelType levelType, const LevelFactory& factor
     levelFactories[levelType] = factory;
 }
 
-void LevelManager::requestChangeLevel(
-    LevelType levelType,
-    const std::vector<Entity*>& entitiesToKeep)
+void LevelManager::requestChangeLevel(LevelType levelType, const std::vector<Entity*>& entitiesToKeep)
 {
     pendingLevelType = levelType;
     pendingEntitiesToKeep = entitiesToKeep;
+    std::cout << "Level change request for " << levelType.name() << std::endl;
 }
 
 void LevelManager::processPendingChange()

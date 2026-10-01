@@ -32,6 +32,18 @@ Entity* EntityManager::getEntity(int entityId)
     return entityIt != entities.end() ? *entityIt : nullptr;
 }
 
+Entity* EntityManager::getEntityByName(const std::string& entityName)
+{
+    const auto entityIt = std::find_if(
+        entities.begin(),
+        entities.end(),
+        [&entityName](const Entity* entity) {
+            return entity != nullptr && entity->getName() == entityName;
+        });
+
+    return entityIt != entities.end() ? *entityIt : nullptr;
+}
+
 void EntityManager::destroyEntity(Entity* entity)
 {
     if (entity == nullptr)

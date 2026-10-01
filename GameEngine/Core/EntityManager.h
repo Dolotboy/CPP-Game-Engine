@@ -37,6 +37,7 @@ public:
     }
 
     static Entity* getEntity(int entityId);
+    static Entity* getEntityByName(const std::string& entityName);
 
     template <typename EntityType>
     static EntityType* getEntity(int entityId)
@@ -69,4 +70,3 @@ private:
     static std::unordered_map<int, std::optional<sf::Vector2f>> persistentPositions;
     static std::unordered_map<int, sf::Vector2f> previousPositions;
 };
-

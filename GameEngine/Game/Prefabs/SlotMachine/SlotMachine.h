@@ -23,6 +23,10 @@ public:
         float z,
         bool useCollision = true);
     void update(float deltaTime) override;
+    void OnCollisionEnter(const Entity2D& other) override;
+    void OnCollisionExit(const Entity2D& other) override;
 
 private:
+    bool canPowerOn = false;
+    bool isPoweredOn = false;
 };

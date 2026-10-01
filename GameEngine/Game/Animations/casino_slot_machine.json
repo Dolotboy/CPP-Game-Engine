@@ -1,0 +1,22 @@
+{
+  "spritePath": "assets/sprites/casino_slot_machine_spritesheet.png",
+  "animations": [
+    {
+      "name": "Idle",
+      "loop": true,
+      "frameDurationMs": 100,
+      "frames": [
+        {
+          "x": 208,
+          "y": 8,
+          "width": 196,
+          "height": 383,
+          "offsetX": 0,
+          "offsetY": 0,
+          "canvasWidth": 196,
+          "canvasHeight": 383
+        }
+      ]
+    }
+  ]
+}

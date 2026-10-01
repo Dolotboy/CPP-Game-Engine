@@ -1,5 +1,6 @@
 #include "Portal.h"
 
+#include "Core/InputManager.h"
 #include "../../../Core/Player.h"
 
 #include <iostream>
@@ -72,6 +73,6 @@ void Portal::update(float deltaTime)
 {
     (void)deltaTime;
 
-    if (isReady && sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+    if (isReady && InputManager::isKeyReleased(sf::Keyboard::E))
         LevelManager::requestChangeLevel(nextLevel);
 }

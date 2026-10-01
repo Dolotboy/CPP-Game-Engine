@@ -11,6 +11,8 @@
 
 Level2::Level2()
 {
+    EntityManager::removeDontDestroyOnLoad(EntityManager::getEntityByName("barrel"));
+
     const float groundY = static_cast<float>(Game::window->getSize().y) - 64.0f;
     EntityManager::addEntity<Portal>("portal", "assets/sprites/red_portal.png", 48.0, 48.0, 100.0f, groundY, -1.0f, true, typeid(Level3));
     EntityManager::addEntity<Portal>("portal", "assets/sprites/blue_portal.png", 48.0, 48.0, 200.0f, groundY, -1.0f, true, typeid(Level1));

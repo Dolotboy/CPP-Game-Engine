@@ -1,4 +1,5 @@
 #include "../Core/Game.h"
+#include "../Core/InputManager.h"
 #include "../Core/LevelManager.h"
 #include "Levels/Level1.h"
 #include "Levels/Level2.h"
@@ -42,9 +43,13 @@ int main(int argc, char* argv[])
     sf::Clock clock;
     while (Game::window->isOpen())
     {
+        InputManager::beginFrame();
+
         sf::Event event{};
         while (Game::window->pollEvent(event))
         {
+            InputManager::handleEvent(event);
+
             if (event.type == sf::Event::Closed)
             {
                 Game::window->close();
