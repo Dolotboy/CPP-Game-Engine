@@ -39,28 +39,25 @@ SlotMachine::SlotMachine(const std::string& entityName,
 
 void SlotMachine::OnCollisionEnter(const Entity2D& other)
 {
-    if(dynamic_cast<const Player*>(&other))
+    if (dynamic_cast<const Player*>(&other) != nullptr)
     {
+        playerInRange = true;
         if(isPoweredOn)
             std::cout << "Slot Machine is powered on. Press Space to roll it" << std::endl;
         else
             std::cout << "Slot Machine is powered off. Press E to power it on." << std::endl;
 
-        canPowerOn = !canPowerOn;
-
-        UIBuilder::addImage(
-            "assets/sprites/e_key.png",
-            sf::Vector2f(position.x, position.y - 40.0f),
-            sf::Vector2f(32.0f, 32.0f));
+        DisplayActionKey();
     }
 }
 
 void SlotMachine::OnCollisionExit(const Entity2D& other)
 {
-    if(dynamic_cast<const Player*>(&other))
+    if (dynamic_cast<const Player*>(&other) != nullptr)
     {
-        canPowerOn = !canPowerOn;
-        UIBuilder::clear();
+        playerInRange = false;
+        UIBuilder::removeImage("assets/sprites/e_key.png");
+        UIBuilder::removeImage("assets/sprites/space_key.png");
     }
 }
 
@@ -68,18 +65,45 @@ void SlotMachine::update(float deltaTime)
 {
     (void)deltaTime;
 
+    if (!playerInRange)
+        return;
+
     if (isPoweredOn && InputManager::isKeyReleased(sf::Keyboard::Space))
     {
         std::cout << "Rolling the Slot Machine!" << std::endl;
     }
-    else if (!isPoweredOn && canPowerOn && InputManager::isKeyReleased(sf::Keyboard::E))
+    else if (!isPoweredOn && InputManager::isKeyReleased(sf::Keyboard::E))
     {
         isPoweredOn = true;
+        DisplayActionKey();
         std::cout << "Slot Machine powered on!" << std::endl;
     }
-    else if (isPoweredOn && canPowerOn && InputManager::isKeyReleased(sf::Keyboard::E))
+    else if (isPoweredOn && InputManager::isKeyReleased(sf::Keyboard::E))
     {
         isPoweredOn = false;
+        DisplayActionKey();
         std::cout << "Slot Machine powered off!" << std::endl;
+    }
+}
+
+void SlotMachine::DisplayActionKey()
+{
+    UIBuilder::removeImage("assets/sprites/e_key.png");
+    UIBuilder::removeImage("assets/sprites/space_key.png");
+
+    if (!playerInRange)
+        return;
+
+    UIBuilder::addImage(
+        "assets/sprites/e_key.png",
+        sf::Vector2f(position.x - (isPoweredOn ? 28.0f : 16.0f), position.y - 40.0f),
+        sf::Vector2f(32.0f, 32.0f));
+
+    if (isPoweredOn)
+    {
+        UIBuilder::addImage(
+            "assets/sprites/space_key.png",
+            sf::Vector2f(position.x + 8.0f, position.y - 40.0f),
+            sf::Vector2f(48.0f, 32.0f));
     }
 }

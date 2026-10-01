@@ -48,6 +48,7 @@ public:
         const std::string& texturePath,
         sf::Vector2f position,
         std::optional<sf::Vector2f> size = std::nullopt);
+    static void removeImage(const std::string& texturePath);
 
     static void handleEvent(const sf::Event& event);
 private:
@@ -59,6 +60,13 @@ private:
         Action action;
     };
 
+    struct Image
+    {
+        EntityUI* element;
+        std::string texturePath;
+    };
+
     static std::vector<EntityUI*> elements;
     static std::vector<Button> buttons;
+    static std::vector<Image> images;
 };

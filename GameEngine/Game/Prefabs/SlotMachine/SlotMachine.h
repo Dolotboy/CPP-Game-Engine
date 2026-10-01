@@ -25,8 +25,9 @@ public:
     void update(float deltaTime) override;
     void OnCollisionEnter(const Entity2D& other) override;
     void OnCollisionExit(const Entity2D& other) override;
+    void DisplayActionKey();
 
 private:
-    bool canPowerOn = false;
+    bool playerInRange = false;
     bool isPoweredOn = false;
 };

@@ -3,10 +3,12 @@
 #include "EntityManager.h"
 #include "EntityUI.h"
 
+#include <algorithm>
 #include <utility>
 
 std::vector<EntityUI*> UIBuilder::elements;
 std::vector<UIBuilder::Button> UIBuilder::buttons;
+std::vector<UIBuilder::Image> UIBuilder::images;
 
 EntityUI* UIBuilder::createElement(sf::Vector2f position)
 {
@@ -20,6 +22,7 @@ void UIBuilder::clear()
     std::vector<EntityUI*> elementsToDestroy = std::move(elements);
     elements.clear();
     buttons.clear();
+    images.clear();
 
     for (EntityUI* element : elementsToDestroy)
     {
@@ -81,12 +84,30 @@ bool UIBuilder::addImage(
     EntityUI* element = createElement(position);
     if (element->addImage(texturePath, position, size))
     {
+        images.push_back({element, texturePath});
         return true;
     }
 
     EntityManager::destroyEntity(element);
     elements.pop_back();
     return false;
+}
+
+void UIBuilder::removeImage(const std::string& texturePath)
+{
+    for (auto image = images.begin(); image != images.end();)
+    {
+        if (image->texturePath != texturePath)
+        {
+            ++image;
+            continue;
+        }
+
+        EntityUI* element = image->element;
+        elements.erase(std::remove(elements.begin(), elements.end(), element), elements.end());
+        EntityManager::destroyEntity(element);
+        image = images.erase(image);
+    }
 }
 
 void UIBuilder::handleEvent(const sf::Event& event)
